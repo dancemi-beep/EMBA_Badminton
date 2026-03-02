@@ -9,7 +9,18 @@
         body { background-color: #f8fafc; font-family: sans-serif; }
         .card { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .court-card { border-top: 4px solid #10b981; }
-        @media print { .no-print { display: none; } .print-break-before { break-before: page; } }
+        @media print { 
+            .no-print { display: none; } 
+            .print-break-before { break-before: page; }
+            footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                padding: 1rem 0 !important;
+            }
+        }
         .config-input { width: 100%; padding: 0.25rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.25rem; font-size: 0.875rem; }
     </style>
 </head>
@@ -328,7 +339,7 @@
         </section>
 
         <footer class="text-center text-slate-400 text-sm py-8 border-t border-slate-100">
-            <p>© 2026 NTUST EMBA 羽球社 - 新生盃籌備組</p>
+            <p>2026 NTUST EMBA 羽球社</p>
         </footer>
     </div>
     <script>
