@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 NTUST 羽球新生盃賽程視覺化</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f8fafc; font-family: sans-serif; }
+        .card { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .court-card { border-top: 4px solid #10b981; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-12">
+        
+        <!-- Header -->
+        <header class="text-center space-y-4 border-b border-slate-200 pb-8">
+            <h1 class="text-4xl font-bold text-blue-900">2026 NTUST 羽球新生盃</h1>
+            <div class="flex justify-center gap-4 mt-4 flex-wrap">
+                <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-base font-medium">10 隊參加</span>
+                <span class="px-4 py-2 bg-green-100 text-green-700 rounded-full text-base font-medium">總積分制</span>
+                <span class="px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-base font-medium">32 分接力賽</span>
+            </div>
+        </header>
+
+        <!-- 預賽對戰圖 -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-semibold flex items-center gap-2">
+                <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
+                第一階段：預賽循環賽對戰圖
+            </h2>
+            
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <!-- 第一組 -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-6 text-center text-blue-700">第一組：三角循環 (3 取 1)</h3>
+                    <div class="flex justify-center items-center h-80">
+                        <svg width="340" height="320" viewBox="0 0 340 320">
+                            <!-- 線段 -->
+                            <line x1="170" y1="50" x2="50" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+                            <line x1="170" y1="50" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+                            <line x1="50" y1="270" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+                            
+                            <!-- 分數框 -->
+                            <!-- 1 vs 2 -->
+                            <rect x="75" y="145" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="110" y="165" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+                            
+                            <!-- 1 vs 3 -->
+                            <rect x="195" y="145" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="230" y="165" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+                            
+                            <!-- 2 vs 3 -->
+                            <rect x="135" y="255" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="170" y="275" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+
+                            <!-- 隊伍節點 -->
+                            <circle cx="170" cy="50" r="40" fill="#2563eb" />
+                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 1</text>
+                            <circle cx="50" cy="270" r="40" fill="#2563eb" />
+                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 2</text>
+                            <circle cx="290" cy="270" r="40" fill="#2563eb" />
+                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 3</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 2 場，取積分最高者晉級</p>
+                </div>
+
+                <!-- 第二組 -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-6 text-center text-blue-700">第二組：三角循環 (3 取 1)</h3>
+                    <div class="flex justify-center items-center h-80">
+                        <svg width="340" height="320" viewBox="0 0 340 320">
+                            <!-- 線段 -->
+                            <line x1="170" y1="50" x2="50" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+                            <line x1="170" y1="50" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+                            <line x1="50" y1="270" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+                            
+                            <!-- 分數框 -->
+                            <!-- 4 vs 5 -->
+                            <rect x="75" y="145" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="110" y="165" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+                            
+                            <!-- 4 vs 6 -->
+                            <rect x="195" y="145" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="230" y="165" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+                            
+                            <!-- 5 vs 6 -->
+                            <rect x="135" y="255" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="170" y="275" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+
+                            <!-- 隊伍節點 -->
+                            <circle cx="170" cy="50" r="40" fill="#2563eb" />
+                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 4</text>
+                            <circle cx="50" cy="270" r="40" fill="#2563eb" />
+                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 5</text>
+                            <circle cx="290" cy="270" r="40" fill="#2563eb" />
+                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 6</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 2 場，取積分最高者晉級</p>
+                </div>
+
+                <!-- 四角循環 -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-6 text-center text-green-700">第三組：四角全循環 (4 取 2)</h3>
+                    <div class="flex justify-center items-center h-80">
+                        <svg width="340" height="320" viewBox="0 0 340 320">
+                            <!-- 連線 -->
+                            <line x1="60" y1="60" x2="280" y2="60" stroke="#cbd5e1" stroke-width="3" />
+                            <line x1="280" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="3" />
+                            <line x1="280" y1="260" x2="60" y2="260" stroke="#cbd5e1" stroke-width="3" />
+                            <line x1="60" y1="260" x2="60" y2="60" stroke="#cbd5e1" stroke-width="3" />
+                            <line x1="60" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+                            <line x1="280" y1="60" x2="60" y2="260" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
+
+                            <!-- 分數框 -->
+                            <!-- Top 7-8 -->
+                            <rect x="135" y="45" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="170" y="65" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+                            
+                            <!-- Bottom 9-10 -->
+                            <rect x="135" y="245" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="170" y="265" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+                            
+                            <!-- Left 7-10 -->
+                            <rect x="25" y="145" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="60" y="165" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+                            
+                            <!-- Right 8-9 -->
+                            <rect x="245" y="145" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="280" y="165" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+
+                            <!-- Diag 7-9 (Offset) -->
+                            <rect x="110" y="120" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="145" y="140" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+
+                            <!-- Diag 8-10 (Offset) -->
+                            <rect x="160" y="170" width="70" height="30" rx="6" fill="#fffbeb" stroke="#94a3b8" stroke-width="1" />
+                            <text x="195" y="190" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="monospace" dy=".3em">_ : _</text>
+
+                            <!-- 隊伍節點 -->
+                            <circle cx="60" cy="60" r="40" fill="#10b981" />
+                            <text x="60" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 7</text>
+                            <circle cx="280" cy="60" r="40" fill="#10b981" />
+                            <text x="280" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 8</text>
+                            <circle cx="280" cy="260" r="40" fill="#10b981" />
+                            <text x="280" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 9</text>
+                            <circle cx="60" cy="260" r="40" fill="#10b981" />
+                            <text x="60" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 10</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 3 場，取積分最高前 2 名晉級</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 決賽晉級圖 -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-semibold flex items-center gap-2">
+                <span class="w-2 h-8 bg-orange-500 rounded-full"></span>
+                第二階段：決賽圈晉級路徑
+            </h2>
+            
+            <div class="card p-8 overflow-x-auto">
+                <div class="min-w-[600px] flex justify-center">
+                    <svg width="800" height="400" viewBox="0 0 800 400">
+                        <!-- 連接線 -->
+                        <path d="M280 90 L360 90 L360 160 L440 160" fill="none" stroke="#94a3b8" stroke-width="3" />
+                        <path d="M280 310 L360 310 L360 240 L440 240" fill="none" stroke="#94a3b8" stroke-width="3" />
+                        <path d="M600 200 L680 200" fill="none" stroke="#f59e0b" stroke-width="4" />
+
+                        <!-- 準決賽方塊 -->
+                        <g>
+                            <rect x="20" y="50" width="260" height="80" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
+                            <text x="40" y="85" font-size="16" fill="#1e40af" font-weight="bold">準決賽 1</text>
+                            <text x="40" y="110" font-size="14" fill="#64748b">第一組(1) vs 第三組(2)</text>
+                            <rect x="190" y="75" width="70" height="30" rx="6" fill="#fffbeb" stroke="#93c5fd" />
+                            <text x="225" y="95" text-anchor="middle" font-size="14" fill="#1e40af" font-family="monospace" dy=".3em">_ : _</text>
+                        </g>
+
+                        <g>
+                            <rect x="20" y="270" width="260" height="80" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
+                            <text x="40" y="305" font-size="16" fill="#1e40af" font-weight="bold">準決賽 2</text>
+                            <text x="40" y="330" font-size="14" fill="#64748b">第二組(1) vs 第三組(1)</text>
+                            <rect x="190" y="295" width="70" height="30" rx="6" fill="#fffbeb" stroke="#93c5fd" />
+                            <text x="225" y="315" text-anchor="middle" font-size="14" fill="#1e40af" font-family="monospace" dy=".3em">_ : _</text>
+                        </g>
+
+                        <!-- 總決賽方塊 -->
+                        <g>
+                            <rect x="440" y="150" width="160" height="100" rx="10" fill="#fff7ed" stroke="#f59e0b" stroke-width="3" />
+                            <text x="520" y="185" text-anchor="middle" font-size="18" fill="#9a3412" font-weight="bold">總決賽</text>
+                            <rect x="485" y="200" width="70" height="30" rx="6" fill="#fffbeb" stroke="#fdba74" />
+                            <text x="520" y="220" text-anchor="middle" font-size="14" fill="#c2410c" font-family="monospace" dy=".3em">_ : _</text>
+                        </g>
+
+                        <!-- 冠軍 -->
+                        <g>
+                            <circle cx="720" cy="200" r="40" fill="#f59e0b" />
+                            <text x="720" y="210" text-anchor="middle" font-size="32">🏆</text>
+                            <text x="720" y="260" text-anchor="middle" font-size="16" fill="#9a3412" font-weight="bold">2026 總冠軍</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 場地分配表 -->
+        <section class="space-y-6 pb-12">
+            <h2 class="text-2xl font-semibold flex items-center gap-2">
+                <span class="w-2 h-8 bg-green-600 rounded-full"></span>
+                場地佈置與即時賽程
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="card p-4 court-card">
+                    <div class="text-sm font-bold text-green-600 mb-1">COURT 1</div>
+                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 1</div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">1 vs 2</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">2 vs 3</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">1 vs 3</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-4 court-card">
+                    <div class="text-sm font-bold text-green-600 mb-1">COURT 2</div>
+                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 2</div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">4 vs 5</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">5 vs 6</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">4 vs 6</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-4 court-card">
+                    <div class="text-sm font-bold text-green-600 mb-1">COURT 3</div>
+                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 3</div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">7 vs 8</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">7 vs 9</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">7 vs 10</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-4 court-card">
+                    <div class="text-sm font-bold text-green-600 mb-1">COURT 4</div>
+                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 4</div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">9 vs 10</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">8 vs 10</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">8 vs 9</div></div>
+                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-slate-400 text-sm py-8 border-t border-slate-100">
+            <p>© 2026 NTUST EMBA 羽球社 - 新生盃籌備組</p>
+        </footer>
+    </div>
+</body>
+</html>
