@@ -9,7 +9,7 @@
         body { background-color: #f8fafc; font-family: sans-serif; }
         .card { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .court-card { border-top: 4px solid #10b981; }
-        @media print { .no-print { display: none; } }
+        @media print { .no-print { display: none; } .print-break-before { break-before: page; } }
         .config-input { width: 100%; padding: 0.25rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.25rem; font-size: 0.875rem; }
     </style>
 </head>
@@ -194,7 +194,7 @@
         </section>
 
         <!-- 決賽晉級圖 -->
-        <section class="space-y-6">
+        <section class="space-y-6 print-break-before">
             <h2 class="text-2xl font-semibold flex items-center gap-2">
                 <span class="w-2 h-8 bg-orange-500 rounded-full"></span>
                 第二階段：決賽圈晉級路徑
@@ -245,7 +245,7 @@
         </section>
 
         <!-- 場地分配表 -->
-        <section class="space-y-6 pb-12">
+        <section class="space-y-6 pb-12 print-break-before">
             <h2 class="text-2xl font-semibold flex items-center gap-2">
                 <span class="w-2 h-8 bg-green-600 rounded-full"></span>
                 場地佈置與即時賽程
