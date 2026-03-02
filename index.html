@@ -9,10 +9,47 @@
         body { background-color: #f8fafc; font-family: sans-serif; }
         .card { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .court-card { border-top: 4px solid #10b981; }
+        @media print { .no-print { display: none; } }
+        .config-input { width: 100%; padding: 0.25rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.25rem; font-size: 0.875rem; }
     </style>
 </head>
 <body class="p-4 md:p-8">
     <div class="max-w-7xl mx-auto space-y-12">
+        
+        <!-- Team Config & Print -->
+        <div class="card p-6 no-print bg-blue-50 border-blue-200">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-blue-800 text-lg">隊伍名稱設定 (輸入後即時更新)</h3>
+                <button onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium shadow-sm flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    列印 / 存為 PDF
+                </button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 1</label><input type="text" class="config-input" value="隊 1" oninput="updateTeam(1, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 2</label><input type="text" class="config-input" value="隊 2" oninput="updateTeam(2, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 3</label><input type="text" class="config-input" value="隊 3" oninput="updateTeam(3, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 4</label><input type="text" class="config-input" value="隊 4" oninput="updateTeam(4, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 5</label><input type="text" class="config-input" value="隊 5" oninput="updateTeam(5, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 6</label><input type="text" class="config-input" value="隊 6" oninput="updateTeam(6, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 7</label><input type="text" class="config-input" value="隊 7" oninput="updateTeam(7, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 8</label><input type="text" class="config-input" value="隊 8" oninput="updateTeam(8, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 9</label><input type="text" class="config-input" value="隊 9" oninput="updateTeam(9, this.value)"></div>
+                <div><label class="text-xs text-slate-500 block mb-1">隊伍 10</label><input type="text" class="config-input" value="隊 10" oninput="updateTeam(10, this.value)"></div>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-blue-200">
+                <h4 class="font-bold text-blue-800 text-md mb-3">晉級隊伍設定 (決賽對戰)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div><label class="text-xs text-slate-500 block mb-1">第一組第一名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g1-1', this.value)"></div>
+                    <div><label class="text-xs text-slate-500 block mb-1">第二組第一名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g2-1', this.value)"></div>
+                    <div><label class="text-xs text-slate-500 block mb-1">第三組第一名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g3-1', this.value)"></div>
+                    <div><label class="text-xs text-slate-500 block mb-1">第三組第二名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g3-2', this.value)"></div>
+                </div>
+            </div>
+        </div>
         
         <!-- Header -->
         <header class="text-center space-y-4 border-b border-slate-200 pb-8">
@@ -57,11 +94,11 @@
 
                             <!-- 隊伍節點 -->
                             <circle cx="170" cy="50" r="40" fill="#2563eb" />
-                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 1</text>
+                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="1">隊 1</text>
                             <circle cx="50" cy="270" r="40" fill="#2563eb" />
-                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 2</text>
+                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="2">隊 2</text>
                             <circle cx="290" cy="270" r="40" fill="#2563eb" />
-                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 3</text>
+                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="3">隊 3</text>
                         </svg>
                     </div>
                     <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 2 場，取積分最高者晉級</p>
@@ -92,11 +129,11 @@
 
                             <!-- 隊伍節點 -->
                             <circle cx="170" cy="50" r="40" fill="#2563eb" />
-                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 4</text>
+                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="4">隊 4</text>
                             <circle cx="50" cy="270" r="40" fill="#2563eb" />
-                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 5</text>
+                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="5">隊 5</text>
                             <circle cx="290" cy="270" r="40" fill="#2563eb" />
-                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 6</text>
+                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="6">隊 6</text>
                         </svg>
                     </div>
                     <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 2 場，取積分最高者晉級</p>
@@ -142,13 +179,13 @@
 
                             <!-- 隊伍節點 -->
                             <circle cx="60" cy="60" r="40" fill="#10b981" />
-                            <text x="60" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 7</text>
+                            <text x="60" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="7">隊 7</text>
                             <circle cx="280" cy="60" r="40" fill="#10b981" />
-                            <text x="280" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 8</text>
+                            <text x="280" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="8">隊 8</text>
                             <circle cx="280" cy="260" r="40" fill="#10b981" />
-                            <text x="280" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 9</text>
+                            <text x="280" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="9">隊 9</text>
                             <circle cx="60" cy="260" r="40" fill="#10b981" />
-                            <text x="60" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16">隊 10</text>
+                            <text x="60" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="10">隊 10</text>
                         </svg>
                     </div>
                     <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 3 場，取積分最高前 2 名晉級</p>
@@ -175,7 +212,7 @@
                         <g>
                             <rect x="20" y="50" width="260" height="80" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
                             <text x="40" y="85" font-size="16" fill="#1e40af" font-weight="bold">準決賽 1</text>
-                            <text x="40" y="110" font-size="14" fill="#64748b">第一組(1) vs 第三組(2)</text>
+                            <text x="40" y="110" font-size="14" fill="#64748b"><tspan data-q="g1-1">第一組(1)</tspan> vs <tspan data-q="g3-2">第三組(2)</tspan></text>
                             <rect x="190" y="75" width="70" height="30" rx="6" fill="#fffbeb" stroke="#93c5fd" />
                             <text x="225" y="95" text-anchor="middle" font-size="14" fill="#1e40af" font-family="monospace" dy=".3em">_ : _</text>
                         </g>
@@ -183,7 +220,7 @@
                         <g>
                             <rect x="20" y="270" width="260" height="80" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
                             <text x="40" y="305" font-size="16" fill="#1e40af" font-weight="bold">準決賽 2</text>
-                            <text x="40" y="330" font-size="14" fill="#64748b">第二組(1) vs 第三組(1)</text>
+                            <text x="40" y="330" font-size="14" fill="#64748b"><tspan data-q="g2-1">第二組(1)</tspan> vs <tspan data-q="g3-1">第三組(1)</tspan></text>
                             <rect x="190" y="295" width="70" height="30" rx="6" fill="#fffbeb" stroke="#93c5fd" />
                             <text x="225" y="315" text-anchor="middle" font-size="14" fill="#1e40af" font-family="monospace" dy=".3em">_ : _</text>
                         </g>
@@ -220,15 +257,15 @@
                     <div class="text-xl font-bold mb-4 border-b pb-2">場地 1</div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">1 vs 2</div></div>
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="1">隊 1</span> vs <span data-team="2">隊 2</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">2 vs 3</div></div>
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="2">隊 2</span> vs <span data-team="3">隊 3</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">1 vs 3</div></div>
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="1">隊 1</span> vs <span data-team="3">隊 3</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                     </div>
@@ -238,15 +275,15 @@
                     <div class="text-xl font-bold mb-4 border-b pb-2">場地 2</div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">4 vs 5</div></div>
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="4">隊 4</span> vs <span data-team="5">隊 5</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">5 vs 6</div></div>
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="5">隊 5</span> vs <span data-team="6">隊 6</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">4 vs 6</div></div>
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="4">隊 4</span> vs <span data-team="6">隊 6</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                     </div>
@@ -256,15 +293,15 @@
                     <div class="text-xl font-bold mb-4 border-b pb-2">場地 3</div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">7 vs 8</div></div>
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="7">隊 7</span> vs <span data-team="8">隊 8</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">7 vs 9</div></div>
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="7">隊 7</span> vs <span data-team="9">隊 9</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">7 vs 10</div></div>
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="7">隊 7</span> vs <span data-team="10">隊 10</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                     </div>
@@ -274,15 +311,15 @@
                     <div class="text-xl font-bold mb-4 border-b pb-2">場地 4</div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium">9 vs 10</div></div>
+                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="9">隊 9</span> vs <span data-team="10">隊 10</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium">8 vs 10</div></div>
+                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="8">隊 8</span> vs <span data-team="10">隊 10</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium">8 vs 9</div></div>
+                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="8">隊 8</span> vs <span data-team="9">隊 9</span></div></div>
                             <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center">_ : _</div>
                         </div>
                     </div>
@@ -294,5 +331,21 @@
             <p>© 2026 NTUST EMBA 羽球社 - 新生盃籌備組</p>
         </footer>
     </div>
+    <script>
+        function updateTeam(id, name) {
+            if (!name) name = "隊 " + id;
+            document.querySelectorAll(`[data-team="${id}"]`).forEach(el => el.textContent = name);
+        }
+        function updateQualifier(id, name) {
+            if (!name) {
+                const defaults = {
+                    'g1-1': '第一組(1)', 'g2-1': '第二組(1)',
+                    'g3-1': '第三組(1)', 'g3-2': '第三組(2)'
+                };
+                name = defaults[id];
+            }
+            document.querySelectorAll(`[data-q="${id}"]`).forEach(el => el.textContent = name);
+        }
+    </script>
 </body>
 </html>
