@@ -37,7 +37,7 @@
                 <div>
                     <h1 class="text-3xl font-extrabold text-blue-900 leading-tight">2026 NTUST EMBA 羽球新生盃</h1>
                     <p class="text-blue-600 font-medium mt-1">10 隊規模 | 4 面場地 | 13:00 - 17:00</p>
-                    <div class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">每場皆為 3 點賽制 (雙、雙、3對3)</div>
+                    <div class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">每隊打 3 點賽制 (第一二點雙打、第三點3對3)</div>
                 </div>
                 <button onclick="window.print()" class="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold shadow-lg shadow-blue-200 flex items-center justify-center gap-2 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,10 +54,10 @@
                         <span class="w-1 h-3 bg-blue-500 rounded-full"></span> 預賽規劃 (Qualifying)
                     </h4>
                     <p class="text-xs text-blue-600 leading-relaxed">
-                        • 10 隊分為 **4-3-3** 三組<br>
+                        • 10 隊分為 4-3-3 三組<br>
                         • 採分組單循環賽制<br>
                         • 每隊預賽打 2-3 場，共 12 場<br>
-                        • 各組取 **積分前 2 名** 晉級決賽
+                        • 各組取 勝點多者前 2 名 晉級決賽
                     </p>
                 </div>
                 <div class="bg-white/50 p-4 rounded-lg border border-blue-200">
@@ -76,9 +76,8 @@
                         <span class="w-1 h-3 bg-blue-500 rounded-full"></span> 比賽規格 (Rules)
                     </h4>
                     <p class="text-xs text-blue-600 leading-relaxed">
-                        • 每場 **3 點**：男雙、混雙、3對3<br>
-                        • 每點 **21 分** (不進球平分/No Deuce)<br>
-                        • 每場時程建議：**35 分鐘**<br>
+                        • 每隊打3點制：第1、2點雙打、第3點3對3<br>
+                        • 每點 21 分 (不加分/No Deuce)<br>
                         • 總時間：13:00 - 17:00 (含頒獎)
                     </p>
                 </div>
@@ -89,19 +88,19 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3.005 3.005 0 013.75-2.906z" />
                     </svg>
-                    參賽隊伍設定 (A1-A10)
+                    參賽隊伍設定
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A1</label><input type="text" class="config-input" value="A1 隊" oninput="updateTeam('A1', this.value)"></div>
                     <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A2</label><input type="text" class="config-input" value="A2 隊" oninput="updateTeam('A2', this.value)"></div>
                     <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A3</label><input type="text" class="config-input" value="A3 隊" oninput="updateTeam('A3', this.value)"></div>
                     <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A4</label><input type="text" class="config-input" value="A4 隊" oninput="updateTeam('A4', this.value)"></div>
-                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A5</label><input type="text" class="config-input" value="A5 隊" oninput="updateTeam('A5', this.value)"></div>
-                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A6</label><input type="text" class="config-input" value="A6 隊" oninput="updateTeam('A6', this.value)"></div>
-                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A7</label><input type="text" class="config-input" value="A7 隊" oninput="updateTeam('A7', this.value)"></div>
-                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A8</label><input type="text" class="config-input" value="A8 隊" oninput="updateTeam('A8', this.value)"></div>
-                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A9</label><input type="text" class="config-input" value="A9 隊" oninput="updateTeam('A9', this.value)"></div>
-                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A10</label><input type="text" class="config-input" value="A10 隊" oninput="updateTeam('A10', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 B1</label><input type="text" class="config-input" value="A5 隊" oninput="updateTeam('B1', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 B2</label><input type="text" class="config-input" value="A6 隊" oninput="updateTeam('B2', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 B3</label><input type="text" class="config-input" value="A7 隊" oninput="updateTeam('B3', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 C1</label><input type="text" class="config-input" value="A8 隊" oninput="updateTeam('C1', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 C2</label><input type="text" class="config-input" value="A9 隊" oninput="updateTeam('C2', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 C3</label><input type="text" class="config-input" value="A10 隊" oninput="updateTeam('C3', this.value)"></div>
                 </div>
             </div>
         </div>
