@@ -3,387 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 NTUST 羽球新生盃賽程視覺化</title>
+    <title>2026 NTUST EMBA 羽球新生盃賽程視覺化</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f8fafc; font-family: sans-serif; }
-        .card { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .court-card { border-top: 4px solid #10b981; }
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .card { background: white; border-radius: 1rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
+        .court-card { border-top: 6px solid #10b981; }
         @media print { 
             .no-print { display: none; } 
             .print-break-before { break-before: page; }
-            footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background-color: white;
-                padding: 1rem 0 !important;
-            }
+            body { padding: 0; background: white; }
+            .card { box-shadow: none; border: 1px solid #cbd5e1; }
         }
-        .config-input { width: 100%; padding: 0.25rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.25rem; font-size: 0.875rem; }
+        .config-input { width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.875rem; background: white; }
         .svg-score-box {
             width: 100%; height: 100%;
             background-color: #fffbeb; border: 1px solid #94a3b8; border-radius: 6px;
-            font-family: monospace; font-size: 14px; color: #94a3b8;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px; color: #1e293b;
             display: flex; justify-content: center; align-items: center;
         }
-        [contenteditable] {
-            cursor: text;
-        }
-        [contenteditable]:focus {
-            outline: 2px solid #3b82f6;
-            outline-offset: 1px;
-        }
+        [contenteditable] { cursor: text; outline: none; }
+        [contenteditable]:focus { background-color: #fefce8; border: 2px solid #3b82f6; }
     </style>
 </head>
 <body class="p-4 md:p-8">
-    <div class="max-w-7xl mx-auto space-y-12">
+    <div class="max-w-7xl mx-auto space-y-10">
         
-        <!-- Team Config & Print -->
-        <div class="card p-6 no-print bg-blue-50 border-blue-200">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-blue-800 text-lg">隊伍名稱設定 (輸入後即時更新)</h3>
-                <button onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium shadow-sm flex items-center gap-2">
+        <!-- Header & Config -->
+        <div class="card p-8 no-print bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-blue-900 leading-tight">2026 NTUST EMBA 羽球新生盃</h1>
+                    <p class="text-blue-600 font-medium mt-1">10 隊規模 | 4 面場地 | 13:00 - 17:00</p>
+                </div>
+                <button onclick="window.print()" class="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold shadow-lg shadow-blue-200 flex items-center justify-center gap-2 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
-                    列印 / 存為 PDF
+                    匯出 PDF / 列印賽程表
                 </button>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 1</label><input type="text" class="config-input" value="隊 1" oninput="updateTeam(1, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 2</label><input type="text" class="config-input" value="隊 2" oninput="updateTeam(2, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 3</label><input type="text" class="config-input" value="隊 3" oninput="updateTeam(3, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 4</label><input type="text" class="config-input" value="隊 4" oninput="updateTeam(4, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 5</label><input type="text" class="config-input" value="隊 5" oninput="updateTeam(5, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 6</label><input type="text" class="config-input" value="隊 6" oninput="updateTeam(6, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 7</label><input type="text" class="config-input" value="隊 7" oninput="updateTeam(7, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 8</label><input type="text" class="config-input" value="隊 8" oninput="updateTeam(8, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 9</label><input type="text" class="config-input" value="隊 9" oninput="updateTeam(9, this.value)"></div>
-                <div><label class="text-xs text-slate-500 block mb-1">隊伍 10</label><input type="text" class="config-input" value="隊 10" oninput="updateTeam(10, this.value)"></div>
-            </div>
             
-            <div class="mt-6 pt-4 border-t border-blue-200">
-                <h4 class="font-bold text-blue-800 text-md mb-3">晉級隊伍設定 (決賽對戰)</h4>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div><label class="text-xs text-slate-500 block mb-1">第一組第一名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g1-1', this.value)"></div>
-                    <div><label class="text-xs text-slate-500 block mb-1">第二組第一名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g2-1', this.value)"></div>
-                    <div><label class="text-xs text-slate-500 block mb-1">第三組第一名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g3-1', this.value)"></div>
-                    <div><label class="text-xs text-slate-500 block mb-1">第三組第二名</label><input type="text" class="config-input" placeholder="輸入隊名" oninput="updateQualifier('g3-2', this.value)"></div>
+            <div class="space-y-6">
+                <h3 class="font-bold text-slate-700 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3.005 3.005 0 013.75-2.906z" />
+                    </svg>
+                    參賽隊伍設定 (A1-A10)
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A1</label><input type="text" class="config-input" value="A1 隊" oninput="updateTeam('A1', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A2</label><input type="text" class="config-input" value="A2 隊" oninput="updateTeam('A2', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A3</label><input type="text" class="config-input" value="A3 隊" oninput="updateTeam('A3', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A4</label><input type="text" class="config-input" value="A4 隊" oninput="updateTeam('A4', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A5</label><input type="text" class="config-input" value="A5 隊" oninput="updateTeam('A5', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A6</label><input type="text" class="config-input" value="A6 隊" oninput="updateTeam('A6', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A7</label><input type="text" class="config-input" value="A7 隊" oninput="updateTeam('A7', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A8</label><input type="text" class="config-input" value="A8 隊" oninput="updateTeam('A8', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A9</label><input type="text" class="config-input" value="A9 隊" oninput="updateTeam('A9', this.value)"></div>
+                    <div><label class="text-xs font-semibold text-slate-400 block mb-1">隊伍 A10</label><input type="text" class="config-input" value="A10 隊" oninput="updateTeam('A10', this.value)"></div>
                 </div>
             </div>
         </div>
-        
-        <!-- Header -->
-        <header class="text-center space-y-4 border-b border-slate-200 pb-8 no-print">
-            <h1 class="text-4xl font-bold text-blue-900">2026 NTUST 羽球新生盃</h1>
-            <div class="flex justify-center gap-4 mt-4 flex-wrap">
-                <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-base font-medium">10 隊參加</span>
-                <span class="px-4 py-2 bg-green-100 text-green-700 rounded-full text-base font-medium">總積分制</span>
-                <span class="px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-base font-medium">32 分接力賽</span>
-            </div>
-        </header>
 
-        <!-- 預賽對戰圖 -->
+        <!-- 預賽對戰圖 (4-3-3) -->
         <section class="space-y-6">
-            <h2 class="text-2xl font-semibold flex items-center gap-2">
+            <h2 class="text-2xl font-bold flex items-center gap-3 text-slate-800">
                 <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
-                第一階段：預賽循環賽對戰圖
+                第一階段：預賽循環賽 (4-3-3 分組)
             </h2>
             
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                <!-- 第一組 -->
+                <!-- A 組 (4隊) -->
                 <div class="card p-6">
-                    <h3 class="text-xl font-bold mb-6 text-center text-blue-700">第一組：三角循環 (3 取 1)</h3>
-                    <div class="flex justify-center items-center h-80">
-                        <svg width="340" height="320" viewBox="0 0 340 320">
-                            <!-- 線段 -->
-                            <line x1="170" y1="50" x2="50" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-                            <line x1="170" y1="50" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-                            <line x1="50" y1="270" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-                            
-                            <!-- 分數框 -->
-                            <!-- 1 vs 2 -->
-                            <foreignObject x="75" y="145" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-                            
-                            <!-- 1 vs 3 -->
-                            <foreignObject x="195" y="145" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-                            
-                            <!-- 2 vs 3 -->
-                            <foreignObject x="135" y="255" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-
-                            <!-- 隊伍節點 -->
-                            <circle cx="170" cy="50" r="40" fill="#2563eb" />
-                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="1">隊 1</text>
-                            <circle cx="50" cy="270" r="40" fill="#2563eb" />
-                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="2">隊 2</text>
-                            <circle cx="290" cy="270" r="40" fill="#2563eb" />
-                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="3">隊 3</text>
-                        </svg>
-                    </div>
-                    <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 2 場，取積分最高者晉級</p>
-                </div>
-
-                <!-- 第二組 -->
-                <div class="card p-6">
-                    <h3 class="text-xl font-bold mb-6 text-center text-purple-700">第二組：三角循環 (3 取 1)</h3>
-                    <div class="flex justify-center items-center h-80">
-                        <svg width="340" height="320" viewBox="0 0 340 320">
-                            <!-- 線段 -->
-                            <line x1="170" y1="50" x2="50" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-                            <line x1="170" y1="50" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-                            <line x1="50" y1="270" x2="290" y2="270" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-                            
-                            <!-- 分數框 -->
-                            <!-- 4 vs 5 -->
-                            <foreignObject x="75" y="145" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-                            
-                            <!-- 4 vs 6 -->
-                            <foreignObject x="195" y="145" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-                            
-                            <!-- 5 vs 6 -->
-                            <foreignObject x="135" y="255" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-
-                            <!-- 隊伍節點 -->
-                            <circle cx="170" cy="50" r="40" fill="#9333ea" />
-                            <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="4">隊 4</text>
-                            <circle cx="50" cy="270" r="40" fill="#9333ea" />
-                            <text x="50" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="5">隊 5</text>
-                            <circle cx="290" cy="270" r="40" fill="#9333ea" />
-                            <text x="290" y="275" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="6">隊 6</text>
-                        </svg>
-                    </div>
-                    <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 2 場，取積分最高者晉級</p>
-                </div>
-
-                <!-- 四角循環 -->
-                <div class="card p-6">
-                    <h3 class="text-xl font-bold mb-6 text-center text-green-700">第三組：四角全循環 (4 取 2)</h3>
+                    <h3 class="text-lg font-bold mb-4 text-center text-blue-700 bg-blue-50 py-2 rounded-lg">A 組：四角全循環 (4 取 2)</h3>
                     <div class="flex justify-center items-center h-80">
                         <svg width="340" height="320" viewBox="0 0 340 320">
                             <!-- 連線 -->
-                            <line x1="60" y1="60" x2="280" y2="60" stroke="#cbd5e1" stroke-width="3" />
-                            <line x1="280" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="3" />
-                            <line x1="280" y1="260" x2="60" y2="260" stroke="#cbd5e1" stroke-width="3" />
-                            <line x1="60" y1="260" x2="60" y2="60" stroke="#cbd5e1" stroke-width="3" />
-                            <line x1="60" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-                            <line x1="280" y1="60" x2="60" y2="260" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6" />
-
-                            <!-- 分數框 -->
-                            <!-- Top 7-8 -->
-                            <foreignObject x="135" y="45" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
+                            <line x1="60" y1="60" x2="280" y2="60" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="280" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="280" y1="260" x2="60" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="60" y1="260" x2="60" y2="60" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="60" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4" />
+                            <line x1="280" y1="60" x2="60" y2="260" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4" />
                             
-                            <!-- Bottom 9-10 -->
-                            <foreignObject x="135" y="245" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
+                            <!-- 分數框 (示例幾對) -->
+                            <foreignObject x="135" y="45" width="70" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div></foreignObject>
+                            <foreignObject x="135" y="245" width="70" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div></foreignObject>
                             
-                            <!-- Left 7-10 -->
-                            <foreignObject x="25" y="145" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-                            
-                            <!-- Right 8-9 -->
-                            <foreignObject x="245" y="145" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-
-                            <!-- Diag 7-9 (Offset) -->
-                            <foreignObject x="110" y="120" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-
-                            <!-- Diag 8-10 (Offset) -->
-                            <foreignObject x="160" y="170" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true">_ : _</div>
-                            </foreignObject>
-
-                            <!-- 隊伍節點 -->
-                            <circle cx="60" cy="60" r="40" fill="#10b981" />
-                            <text x="60" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="7">隊 7</text>
-                            <circle cx="280" cy="60" r="40" fill="#10b981" />
-                            <text x="280" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="8">隊 8</text>
-                            <circle cx="280" cy="260" r="40" fill="#10b981" />
-                            <text x="280" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="9">隊 9</text>
-                            <circle cx="60" cy="260" r="40" fill="#10b981" />
-                            <text x="60" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="16" data-team="10">隊 10</text>
+                            <!-- 節點 -->
+                            <circle cx="60" cy="60" r="35" fill="#2563eb" />
+                            <text x="60" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A1">A1</text>
+                            <circle cx="280" cy="60" r="35" fill="#2563eb" />
+                            <text x="280" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A2">A2</text>
+                            <circle cx="280" cy="260" r="35" fill="#2563eb" />
+                            <text x="280" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A3">A3</text>
+                            <circle cx="60" cy="260" r="35" fill="#2563eb" />
+                            <text x="60" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A4">A4</text>
                         </svg>
                     </div>
-                    <p class="text-sm text-slate-500 text-center mt-2 italic">每隊打 3 場，取積分最高前 2 名晉級</p>
                 </div>
-            </div>
-        </section>
 
-        <!-- 決賽晉級圖 -->
-        <section class="space-y-6 print-break-before">
-            <h2 class="text-2xl font-semibold flex items-center gap-2">
-                <span class="w-2 h-8 bg-orange-500 rounded-full"></span>
-                第二階段：決賽圈晉級路徑
-            </h2>
-            
-            <div class="card p-8 overflow-x-auto">
-                <div class="min-w-[600px] flex justify-center">
-                    <svg width="800" height="400" viewBox="0 0 800 400">
-                        <!-- 連接線 -->
-                        <path d="M280 90 L360 90 L360 160 L440 160" fill="none" stroke="#94a3b8" stroke-width="3" />
-                        <path d="M280 310 L360 310 L360 240 L440 240" fill="none" stroke="#94a3b8" stroke-width="3" />
-                        <path d="M600 200 L680 200" fill="none" stroke="#f59e0b" stroke-width="4" />
+                <!-- B 組 (3隊) -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold mb-4 text-center text-purple-700 bg-purple-50 py-2 rounded-lg">B 組：三角循環 (3 取 2)</h3>
+                    <div class="flex justify-center items-center h-80">
+                        <svg width="340" height="320" viewBox="0 0 340 320">
+                            <line x1="170" y1="60" x2="60" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="170" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="60" y1="260" x2="280" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            
+                            <circle cx="170" cy="60" r="35" fill="#9333ea" />
+                            <text x="170" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A5">A5</text>
+                            <circle cx="60" cy="260" r="35" fill="#9333ea" />
+                            <text x="60" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A6">A6</text>
+                            <circle cx="280" cy="260" r="35" fill="#9333ea" />
+                            <text x="280" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A7">A7</text>
+                        </svg>
+                    </div>
+                </div>
 
-                        <!-- 準決賽方塊 -->
-                        <g>
-                            <rect x="20" y="50" width="260" height="80" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
-                            <text x="40" y="85" font-size="16" fill="#1e40af" font-weight="bold">準決賽 1</text>
-                            <text x="40" y="110" font-size="14" fill="#64748b"><tspan data-q="g1-1">第一組(1)</tspan> vs <tspan data-q="g3-2">第三組(2)</tspan></text>
-                            <foreignObject x="190" y="75" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true" style="border-color: #93c5fd;">_ : _</div>
-                            </foreignObject>
-                        </g>
-
-                        <g>
-                            <rect x="20" y="270" width="260" height="80" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
-                            <text x="40" y="305" font-size="16" fill="#1e40af" font-weight="bold">準決賽 2</text>
-                            <text x="40" y="330" font-size="14" fill="#64748b"><tspan data-q="g2-1">第二組(1)</tspan> vs <tspan data-q="g3-1">第三組(1)</tspan></text>
-                            <foreignObject x="190" y="295" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true" style="border-color: #93c5fd;">_ : _</div>
-                            </foreignObject>
-                        </g>
-
-                        <!-- 總決賽方塊 -->
-                        <g>
-                            <rect x="440" y="150" width="160" height="100" rx="10" fill="#fff7ed" stroke="#f59e0b" stroke-width="3" />
-                            <text x="520" y="185" text-anchor="middle" font-size="18" fill="#9a3412" font-weight="bold">總決賽</text>
-                            <foreignObject x="485" y="200" width="70" height="30">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="svg-score-box" contenteditable="true" style="border-color: #fdba74;">_ : _</div>
-                            </foreignObject>
-                        </g>
-
-                        <!-- 冠軍 -->
-                        <g>
-                            <circle cx="720" cy="200" r="40" fill="#f59e0b" />
-                            <text x="720" y="210" text-anchor="middle" font-size="32">🏆</text>
-                            <text x="720" y="260" text-anchor="middle" font-size="16" fill="#9a3412" font-weight="bold">2026 總冠軍</text>
-                        </g>
-                    </svg>
+                <!-- C 組 (3隊) -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold mb-4 text-center text-emerald-700 bg-emerald-50 py-2 rounded-lg">C 組：三角循環 (3 取 2)</h3>
+                    <div class="flex justify-center items-center h-80">
+                        <svg width="340" height="320" viewBox="0 0 340 320">
+                            <line x1="170" y1="60" x2="60" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="170" y1="60" x2="280" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            <line x1="60" y1="260" x2="280" y2="260" stroke="#cbd5e1" stroke-width="2" />
+                            
+                            <circle cx="170" cy="60" r="35" fill="#10b981" />
+                            <text x="170" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A8">A8</text>
+                            <circle cx="60" cy="260" r="35" fill="#10b981" />
+                            <text x="60" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A9">A9</text>
+                            <circle cx="280" cy="260" r="35" fill="#10b981" />
+                            <text x="280" y="265" text-anchor="middle" fill="white" font-weight="bold" font-size="14" data-team="A10">A10</text>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- 場地分配表 -->
-        <section class="space-y-6 pb-12 print-break-before">
-            <h2 class="text-2xl font-semibold flex items-center gap-2">
-                <span class="w-2 h-8 bg-green-600 rounded-full"></span>
-                場地佈置與即時賽程
+        <section class="space-y-6 pb-20 print-break-before">
+            <h2 class="text-2xl font-bold flex items-center gap-3 text-slate-800">
+                <span class="w-2 h-8 bg-orange-500 rounded-full"></span>
+                第二階段：場地分配與詳細時間表
             </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="card p-4 court-card">
-                    <div class="text-sm font-bold text-green-600 mb-1">COURT 1</div>
-                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 1</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Court 1 -->
+                <div class="card p-5 court-card border-blue-500">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <span class="text-sm font-black text-blue-600">COURT 1</span>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">A 組主場</span>
+                    </div>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="1">隊 1</span> vs <span data-team="2">隊 2</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:00 - 13:35</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A1">A1</span> vs <span data-team="A2">A2</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="2">隊 2</span> vs <span data-team="3">隊 3</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:35 - 14:10</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A1">A1</span> vs <span data-team="A3">A3</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="1">隊 1</span> vs <span data-team="3">隊 3</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">14:10 - 14:45</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A1">A1</span> vs <span data-team="A4">A4</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
+                            <div class="text-[10px] font-bold text-indigo-400 mb-1 italic">14:45 - 15:20 (決賽 R1)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-indigo-700">Seed 3 vs 6</div>
+                                <div class="bg-white border-indigo-200 border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-indigo-600 rounded-lg">
+                            <div class="text-[10px] font-bold text-indigo-200 mb-1">15:20 - 15:55 (準決賽 1)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-white">Winner vs S1</div>
+                                <div class="bg-indigo-700 border-indigo-500 border rounded px-2 py-1 text-xs font-mono text-white" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-amber-500 rounded-lg ring-4 ring-amber-100 italic">
+                            <div class="text-[10px] font-bold text-amber-100 mb-1 underline">15:55 - 16:30 (冠軍賽)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-black text-white italic">🏆 FINAL</div>
+                                <div class="bg-amber-600 border-amber-400 border rounded px-2 py-1 text-xs font-mono text-white" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card p-4 court-card">
-                    <div class="text-sm font-bold text-green-600 mb-1">COURT 2</div>
-                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 2</div>
+
+                <!-- Court 2 -->
+                <div class="card p-5 court-card border-indigo-500">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <span class="text-sm font-black text-indigo-600">COURT 2</span>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">A 組主場</span>
+                    </div>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="4">隊 4</span> vs <span data-team="5">隊 5</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:00 - 13:35</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A3">A3</span> vs <span data-team="A4">A4</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="5">隊 5</span> vs <span data-team="6">隊 6</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:35 - 14:10</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A2">A2</span> vs <span data-team="A4">A4</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="4">隊 4</span> vs <span data-team="6">隊 6</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">14:10 - 14:45</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A2">A2</span> vs <span data-team="A3">A3</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
+                            <div class="text-[10px] font-bold text-indigo-400 mb-1 italic">14:45 - 15:20 (決賽 R1)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-indigo-700">Seed 4 vs 5</div>
+                                <div class="bg-white border-indigo-200 border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-indigo-600 rounded-lg">
+                            <div class="text-[10px] font-bold text-indigo-200 mb-1">15:20 - 15:55 (準決賽 2)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-white">Winner vs S2</div>
+                                <div class="bg-indigo-700 border-indigo-500 border rounded px-2 py-1 text-xs font-mono text-white" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-100 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">15:55 - 16:30 (季軍賽)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold">3rd Place Match</div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card p-4 court-card">
-                    <div class="text-sm font-bold text-green-600 mb-1">COURT 3</div>
-                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 3</div>
+
+                <!-- Court 3 -->
+                <div class="card p-5 court-card border-purple-500">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <span class="text-sm font-black text-purple-600">COURT 3</span>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">B 組主場</span>
+                    </div>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="7">隊 7</span> vs <span data-team="8">隊 8</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:00 - 13:35</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A5">A5</span> vs <span data-team="A6">A6</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="7">隊 7</span> vs <span data-team="9">隊 9</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:35 - 14:10</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A5">A7</span> vs <span data-team="A5">A5</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="7">隊 7</span> vs <span data-team="10">隊 10</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">14:10 - 14:45</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A6">A6</span> vs <span data-team="A7">A7</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-pink-50 border border-pink-100 rounded-lg">
+                            <div class="text-[10px] font-bold text-pink-400 mb-1">14:45 - 15:20 (友誼賽 S1)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-pink-700">Friend Match 1</div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono border-pink-200" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-pink-600 rounded-lg">
+                            <div class="text-[10px] font-bold text-pink-200 mb-1">15:20 - 15:55 (友誼決賽)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-white">Friendly Final</div>
+                                <div class="bg-pink-700 border-pink-500 border rounded px-2 py-1 text-xs font-mono text-white" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card p-4 court-card">
-                    <div class="text-sm font-bold text-green-600 mb-1">COURT 4</div>
-                    <div class="text-xl font-bold mb-4 border-b pb-2">場地 4</div>
+
+                <!-- Court 4 -->
+                <div class="card p-5 court-card border-emerald-500">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <span class="text-sm font-black text-emerald-600">COURT 4</span>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">C 組主場</span>
+                    </div>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">13:30 (R1)</div><div class="font-lg font-medium"><span data-team="9">隊 9</span> vs <span data-team="10">隊 10</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:00 - 13:35</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A8">A8</span> vs <span data-team="A9">A9</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:00 (R2)</div><div class="font-lg font-medium"><span data-team="8">隊 8</span> vs <span data-team="10">隊 10</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">13:35 - 14:10</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A8">A8</span> vs <span data-team="A10">A10</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div><div class="text-sm text-slate-400">14:30 (R3)</div><div class="font-lg font-medium"><span data-team="8">隊 8</span> vs <span data-team="9">隊 9</span></div></div>
-                            <div class="bg-yellow-50 px-3 py-2 rounded border border-slate-300 text-slate-400 text-base font-mono min-w-[60px] text-center" contenteditable="true">_ : _</div>
+                        <div class="p-3 bg-slate-50 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 mb-1">14:10 - 14:45</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold"><span data-team="A9">A9</span> vs <span data-team="A10">A10</span></div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-pink-50 border border-pink-100 rounded-lg">
+                            <div class="text-[10px] font-bold text-pink-400 mb-1">14:45 - 15:20 (友誼賽 S2)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-pink-700">Friend Match 2</div>
+                                <div class="bg-white border rounded px-2 py-1 text-xs font-mono border-pink-200" contenteditable="true">_ : _</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-400 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-200 mb-1 font-mono tracking-tighter uppercase px-1 py-0.5 rounded leading-none inline-block border border-slate-300 mr-2 opacity-75">15:20 - 15:55 (友誼 9-10)</div>
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-bold text-white">Ranking 9-10</div>
+                                <div class="bg-slate-500 border-slate-300 border rounded px-2 py-1 text-xs font-mono text-white" contenteditable="true">_ : _</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer class="text-center text-slate-400 text-sm py-8 border-t border-slate-100">
-            <p>2026 NTUST EMBA 羽球社</p>
+        <footer class="text-center text-slate-400 text-sm py-12 border-t border-slate-100 no-print">
+            <p class="font-bold text-slate-500 mb-2">2026 NTUST EMBA 羽球社</p>
+            <p>本賽程系統由 AI 設計，支援即時比分編輯與 PDF 匯出。</p>
         </footer>
     </div>
+
     <script>
         function updateTeam(id, name) {
-            if (!name) name = "隊 " + id;
-            document.querySelectorAll(`[data-team="${id}"]`).forEach(el => el.textContent = name);
-        }
-        function updateQualifier(id, name) {
-            if (!name) {
-                const defaults = {
-                    'g1-1': '第一組(1)', 'g2-1': '第二組(1)',
-                    'g3-1': '第三組(1)', 'g3-2': '第三組(2)'
-                };
-                name = defaults[id];
-            }
-            document.querySelectorAll(`[data-q="${id}"]`).forEach(el => el.textContent = name);
+            if (!name) name = id + " 隊";
+            document.querySelectorAll(`[data-team="${id}"]`).forEach(el => {
+                el.textContent = name;
+            });
         }
     </script>
 </body>
