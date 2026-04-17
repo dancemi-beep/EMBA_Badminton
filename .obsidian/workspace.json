@@ -11,6 +11,18 @@
             "id": "dd2f7e04f2fd8af2",
             "type": "leaf",
             "state": {
+              "type": "image",
+              "state": {
+                "file": "賽制.jpg"
+              },
+              "icon": "lucide-image",
+              "title": "賽制"
+            }
+          },
+          {
+            "id": "0909cc8dc1403bfe",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
                 "file": "賽程.md",
@@ -21,7 +33,8 @@
               "title": "賽程"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -183,8 +196,9 @@
       "bases:建立新的 base": false
     }
   },
-  "active": "dd2f7e04f2fd8af2",
+  "active": "0909cc8dc1403bfe",
   "lastOpenFiles": [
-    "賽制.jpg"
+    "賽制.jpg",
+    "賽程.md"
   ]
 }
