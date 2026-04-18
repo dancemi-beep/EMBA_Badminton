@@ -22,20 +22,24 @@
         .diagram-container { position: relative; height: 350px; width: 100%; }
         .court-label { font-size: 13px; font-weight: 800; color: #ef4444; position: absolute; transform: translate(-50%, -50%); z-index: 15; background: #fff; padding: 3px 10px; border-radius: 6px; border: 1.5px solid #fecaca; }
         .config-input { width: 100%; padding: 0.85rem; border: 2px solid #e2e8f0; border-radius: 1rem; font-size: 1.15rem; text-align: center; font-weight: 700; background: #fff; outline: none; }
-        .honor-input { border: 4px solid #fbbf24; background: linear-gradient(135deg, #fffbeb 0%, #fff 100%); font-size: 1.6rem; color: #92400e; padding: 1.3rem; }
-        .honor-green { border: 4px solid #10b981; background: linear-gradient(135deg, #f0fdf4 0%, #fff 100%); font-size: 1.6rem; color: #065f46; padding: 1.3rem; }
+        .honor-input { border: 4px solid #fbbf24; background: linear-gradient(135deg, #fffbeb 0%, #fff 100%); font-size: 1.5rem; color: #92400e; padding: 1.2rem; }
+        .honor-green { border: 4px solid #10b981; background: linear-gradient(135deg, #f0fdf4 0%, #fff 100%); font-size: 1.5rem; color: #065f46; padding: 1.2rem; }
         .score-input { width: 50px; padding: 5px; border: 2px solid #e2e8f0; border-radius: 8px; text-align: center; font-weight: 800; font-size: 1rem; }
-        .promote-check { width: 20px; height: 20px; cursor: pointer; accent-color: #2563eb; }
+        .promote-check { width: 22px; height: 22px; cursor: pointer; accent-color: #2563eb; }
         .promoted-row { background-color: #eff6ff; border-left: 6px solid #3b82f6; }
-        @media print { .no-print { display: none !important; } .tab-content { display: none !important; } .tab-content.active { display: block !important; } .card { border: none; box-shadow: none; border-radius: 0; } }
+        .slot-announcement { background-color: #f1f5f9; border-left: 6px solid #94a3b8; padding: 10px; border-radius: 1rem; font-weight: 800; text-align: center; color: #475569; font-size: 0.9rem; }
+        .slot-prelim { border-left: 6px solid #e2e8f0; }
+        .slot-knockout { background-color: #f0f9ff; border-left: 6px solid #3b82f6; }
+        .slot-friendship { background-color: #f0fdf4; border-left: 6px solid #10b981; }
+        .slot-title { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #94a3b8; margin-bottom: 2px; }
+        @media print { .no-print { display: none !important; } .tab-content { display: none !important; } .tab-content.active { display: block !important; } }
     </style>
 </head>
 
 <body class="p-6 lg:p-10" onload="loadData()">
-    <div class="max-w-[1600px] mx-auto space-y-12">
-        <!-- Header -->
+    <div class="max-w-[1700px] mx-auto space-y-12">
         <header class="bg-blue-900 text-white p-10 rounded-[3rem] shadow-2xl flex flex-col items-center gap-10 text-center no-print">
-            <h1 class="text-5xl font-black tracking-tight italic">2026 NTUST EMBA 羽球新生盃</h1>
+            <h1 class="text-5xl font-black italic">2026 NTUST EMBA 羽球新生盃</h1>
             <div class="flex flex-wrap justify-center items-center gap-6 w-full">
                 <nav class="flex gap-1">
                     <button onclick="switchTab('tab-mgmt')" id="btn-tab-mgmt" class="tab-btn active px-8 py-4 rounded-xl">📊 戰況管理</button>
@@ -43,69 +47,21 @@
                     <button onclick="switchTab('tab-prelim')" id="btn-tab-prelim" class="tab-btn px-8 py-4 rounded-xl">🏸 預賽分組</button>
                     <button onclick="switchTab('tab-schedule')" id="btn-tab-schedule" class="tab-btn px-8 py-4 rounded-xl">🕒 場地時程</button>
                 </nav>
-                <div class="flex gap-4">
-                    <button onclick="saveData()" class="px-7 py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl shadow-lg font-black text-lg transition-transform hover:scale-105">💾 儲存</button>
-                    <button onclick="window.print()" class="px-7 py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl shadow-lg font-black text-lg">🖨️ 列印</button>
-                </div>
+                <div class="flex gap-4"><button onclick="saveData()" class="px-7 py-4 bg-emerald-600 rounded-2xl shadow-lg font-black text-lg">💾 儲存</button><button onclick="window.print()" class="px-7 py-4 bg-blue-600 rounded-2xl shadow-lg font-black text-lg">🖨️ 列印</button><button onclick="resetData()" class="px-7 py-4 bg-red-600 rounded-2xl shadow-lg font-black text-lg">🚨 重置</button></div>
             </div>
         </header>
 
-        <!-- Tab 1: Management -->
+        <!-- Tab 1: Management (UPDATED SYNC LOGIC) -->
         <div id="tab-mgmt" class="tab-content active space-y-10">
             <section class="card p-10 border-t-[14px] border-blue-500 shadow-xl">
                 <h2 class="text-3xl font-black italic text-slate-800 mb-10">⌨️ 大會戰況管理台</h2>
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-16">
-                    <!-- Left Column -->
                     <div class="space-y-10">
-                        <div class="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-200">
-                             <h3 class="text-xl font-black text-blue-900 mb-6 italic">預賽抽籤名單 (A1-C3)</h3>
-                             <div class="grid grid-cols-2 gap-5">
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">A1</label><input type="text" id="input-A1" class="config-input persist" value="王獅" oninput="updateTeam('A1', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">A2</label><input type="text" id="input-A2" class="config-input persist" value="飛龍" oninput="updateTeam('A2', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">A3</label><input type="text" id="input-A3" class="config-input persist" value="猿猴" oninput="updateTeam('A3', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">A4</label><input type="text" id="input-A4" class="config-input persist" value="神鷹" oninput="updateTeam('A4', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">B1</label><input type="text" id="input-B1" class="config-input persist" value="輕羅小扇" oninput="updateTeam('B1', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">B2</label><input type="text" id="input-B2" class="config-input persist" value="撲流螢" oninput="updateTeam('B2', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">B3</label><input type="text" id="input-B3" class="config-input persist" value="國家" oninput="updateTeam('B3', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">C1</label><input type="text" id="input-C1" class="config-input persist" value="第一隊" oninput="updateTeam('C1', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">C2</label><input type="text" id="input-C2" class="config-input persist" value="青鳥" oninput="updateTeam('C2', this.value)"></div>
-                                <div><label class="text-slate-400 block mb-1 text-xs font-bold">C3</label><input type="text" id="input-C3" class="config-input persist" value="野豬" oninput="updateTeam('C3', this.value)"></div>
-                             </div>
-                        </div>
-                        <div class="p-8 bg-amber-50 rounded-[2.5rem] border-4 border-amber-200">
-                            <h3 class="text-xl font-black text-amber-800 mb-6 italic">🎖️ 榮耀結算錄入</h3>
-                            <div class="space-y-6">
-                                <div><label class="text-amber-600 block mb-2 font-black">👑 總冠軍</label><input type="text" id="input-CHAMP" class="config-input persist honor-input" oninput="syncTree('CHAMP', this.value)"></div>
-                                <div><label class="text-emerald-600 block mb-2 font-black">🌿 友誼最高</label><input type="text" id="input-F-MAX" class="config-input persist honor-green" oninput="syncTree('F-MAX', this.value)"></div>
-                            </div>
-                        </div>
+                        <div class="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-200"><h3 class="text-xl font-black text-blue-900 mb-6 italic">預賽抽籤名單 (A1-C3)</h3><div class="grid grid-cols-2 gap-5"><div><label class="text-slate-400 block mb-1 text-xs font-bold">A1</label><input type="text" id="input-A1" class="config-input persist" value="王獅" oninput="syncAll('A1', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">A2</label><input type="text" id="input-A2" class="config-input persist" value="飛龍" oninput="syncAll('A2', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">A3</label><input type="text" id="input-A3" class="config-input persist" value="猿猴" oninput="syncAll('A3', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">A4</label><input type="text" id="input-A4" class="config-input persist" value="神鷹" oninput="syncAll('A4', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">B1</label><input type="text" id="input-B1" class="config-input persist" value="輕羅小扇" oninput="syncAll('B1', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">B2</label><input type="text" id="input-B2" class="config-input persist" value="撲流螢" oninput="syncAll('B2', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">B3</label><input type="text" id="input-B3" class="config-input persist" value="國家" oninput="syncAll('B3', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">C1</label><input type="text" id="input-C1" class="config-input persist" value="第一隊" oninput="syncAll('C1', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">C2</label><input type="text" id="input-C2" class="config-input persist" value="青鳥" oninput="syncAll('C2', this.value)"></div><div><label class="text-slate-400 block mb-1 text-xs font-bold">C3</label><input type="text" id="input-C3" class="config-input persist" value="野豬" oninput="syncAll('C3', this.value)"></div></div></div>
+                        <div class="p-8 bg-amber-50 rounded-[2.5rem] border-4 border-amber-200"><h3 class="text-xl font-black text-amber-800 mb-6 italic">🎖️ 榮耀結算錄入</h3><div class="space-y-6"><div><label class="text-amber-600 block mb-2 font-black">👑 總冠軍</label><input type="text" id="input-CHAMP" class="config-input persist honor-input" oninput="syncAll('CHAMP', this.value)"></div><div><label class="text-emerald-600 block mb-2 font-black">🌿 友誼最高</label><input type="text" id="input-F-MAX" class="config-input persist honor-green" oninput="syncAll('F-MAX', this.value)"></div></div></div>
                     </div>
-                    <!-- Right Column -->
                     <div class="space-y-10">
-                        <div class="p-8 bg-orange-50 rounded-[2.5rem] border border-orange-200">
-                             <h3 class="text-xl font-black text-orange-900 mb-6 italic">各階段決賽優勝錄入</h3>
-                             <div class="grid grid-cols-2 gap-5">
-                                <div><label class="block mb-1 text-xs font-black text-blue-600">季 1</label><input type="text" id="input-SI1" class="config-input persist" oninput="syncTree('SI1', this.value)"></div>
-                                <div><label class="block mb-1 text-xs font-black text-blue-600">季 2</label><input type="text" id="input-SI2" class="config-input persist" oninput="syncTree('SI2', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">亞 1</label><input type="text" id="input-Y1" class="config-input persist" oninput="syncTree('Y1', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">亞 2</label><input type="text" id="input-Y2" class="config-input persist" oninput="syncTree('Y2', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">冠 1</label><input type="text" id="input-G1" class="config-input persist" oninput="syncTree('G1', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">冠 2</label><input type="text" id="input-G2" class="config-input persist" oninput="syncTree('G2', this.value)"></div>
-                                <div><label class="block mb-1 text-xs font-bold text-emerald-700">Final 友1</label><input type="text" id="input-FF1" class="config-input persist" oninput="syncTree('FF1', this.value)"></div>
-                                <div><label class="block mb-1 text-xs font-bold text-emerald-700">Final 友2</label><input type="text" id="input-FF2" class="config-input persist" oninput="syncTree('FF2', this.value)"></div>
-                                <div class="col-span-2 pt-6 border-t mt-4 text-[10px] font-black text-slate-300 uppercase italic flex items-center gap-2"><span class="w-4 h-px bg-slate-300"></span> 決賽/友誼成員抽籤 <span class="w-4 h-px bg-slate-300"></span></div>
-                                <div><label class="block mb-1 text-xs">晉級1</label><input type="text" id="input-J1" class="config-input persist" oninput="syncTree('J1', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">晉級2</label><input type="text" id="input-J2" class="config-input persist" oninput="syncTree('J2', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">晉級3</label><input type="text" id="input-J3" class="config-input persist" oninput="syncTree('J3', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">晉級4</label><input type="text" id="input-J4" class="config-input persist" oninput="syncTree('J4', this.value)"></div>
-                                <div><label class="block mb-1 text-xs font-bold">晉5(種)</label><input type="text" id="input-J5" class="config-input persist" oninput="syncTree('J5', this.value)"></div>
-                                <div><label class="block mb-1 text-xs font-bold">晉6(種)</label><input type="text" id="input-J6" class="config-input persist" oninput="syncTree('J6', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">友誼1</label><input type="text" id="input-F1" class="config-input persist" oninput="syncTree('F1', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">友誼2</label><input type="text" id="input-F2" class="config-input persist" oninput="syncTree('F2', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">友誼3</label><input type="text" id="input-F3" class="config-input persist" oninput="syncTree('F3', this.value)"></div>
-                                <div><label class="block mb-1 text-xs">友誼4</label><input type="text" id="input-F4" class="config-input persist" oninput="syncTree('F4', this.value)"></div>
-                             </div>
-                        </div>
+                        <div class="p-8 bg-orange-50 rounded-[2.5rem] border border-orange-200"><h3 class="text-xl font-black text-orange-900 mb-6 italic">優勝名次/種子錄入</h3><div class="grid grid-cols-2 gap-5"><div><label class="block mb-1 text-xs font-black text-blue-600">季 1</label><input type="text" id="input-SI1" class="config-input persist" oninput="syncAll('SI1', this.value)"></div><div><label class="block mb-1 text-xs font-black text-blue-600">季 2</label><input type="text" id="input-SI2" class="config-input persist" oninput="syncAll('SI2', this.value)"></div><div><label class="block mb-1 text-xs">亞 1</label><input type="text" id="input-Y1" class="config-input persist" oninput="syncAll('Y1', this.value)"></div><div><label class="block mb-1 text-xs">亞 2</label><input type="text" id="input-Y2" class="config-input persist" oninput="syncAll('Y2', this.value)"></div><div><label class="block mb-1 text-xs">冠 1</label><input type="text" id="input-G1" class="config-input persist" oninput="syncAll('G1', this.value)"></div><div><label class="block mb-1 text-xs">冠 2</label><input type="text" id="input-G2" class="config-input persist" oninput="syncAll('G2', this.value)"></div><div><label class="block mb-1 text-xs font-bold text-emerald-700">Final 友1</label><input type="text" id="input-FF1" class="config-input persist" oninput="syncAll('FF1', this.value)"></div><div><label class="block mb-1 text-xs font-bold text-emerald-700">Final 友2</label><input type="text" id="input-FF2" class="config-input persist" oninput="syncAll('FF2', this.value)"></div><div class="col-span-2 pt-6 border-t mt-4 text-[10px] font-black text-slate-300 uppercase italic">決賽成員抽籤</div><div><label class="block mb-1 text-xs">晉級1</label><input type="text" id="input-J1" class="config-input persist" oninput="syncAll('J1', this.value)"></div><div><label class="block mb-1 text-xs">晉級2</label><input type="text" id="input-J2" class="config-input persist" oninput="syncAll('J2', this.value)"></div><div><label class="block mb-1 text-xs">晉級3</label><input type="text" id="input-J3" class="config-input persist" oninput="syncAll('J3', this.value)"></div><div><label class="block mb-1 text-xs">晉級4</label><input type="text" id="input-J4" class="config-input persist" oninput="syncAll('J4', this.value)"></div><div><label class="block mb-1 text-xs font-bold">晉5(種)</label><input type="text" id="input-J5" class="config-input persist" oninput="syncAll('J5', this.value)"></div><div><label class="block mb-1 text-xs font-bold">晉6(種)</label><input type="text" id="input-J6" class="config-input persist" oninput="syncAll('J6', this.value)"></div><div><label class="block mb-1 text-xs">友誼1</label><input type="text" id="input-F1" class="config-input persist" oninput="syncAll('F1', this.value)"></div><div><label class="block mb-1 text-xs">友誼2</label><input type="text" id="input-F2" class="config-input persist" oninput="syncAll('F2', this.value)"></div><div><label class="block mb-1 text-xs">友誼3</label><input type="text" id="input-F3" class="config-input persist" oninput="syncAll('F3', this.value)"></div><div><label class="block mb-1 text-xs">友誼4</label><input type="text" id="input-F4" class="config-input persist" oninput="syncAll('F4', this.value)"></div></div></div>
                     </div>
                 </div>
             </section>
@@ -115,115 +71,90 @@
         <div id="tab-bracket" class="tab-content space-y-12">
             <h2 class="text-4xl font-black text-slate-800 text-center italic">🏆 決賽與友誼圈：正式籤表圖</h2>
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
-                <div class="card p-12 flex flex-col items-center shadow-lg">
-                    <h3 class="text-2xl font-black mb-10 underline decoration-blue-500 italic">晉級賽對外賽圈</h3>
-                    <div style="width: 950px; height: 500px;"><svg width="100%" height="100%" viewBox="0 0 950 450"><path class="bracket-line" d="M280,400 v-80 h120 v80" /><path class="bracket-line" d="M520,400 v-80 h120 v80" /><path class="bracket-line" d="M160,400 v-180 h180 v100" /><path class="bracket-line" d="M340,320 v-100" /><path class="bracket-line" d="M760,400 v-180 h-180 v100" /><path class="bracket-line" d="M580,320 v-100" /><path class="bracket-line" d="M250,220 v-90 h420 v90" /><text x="160" y="430" class="bracket-text" text-anchor="middle" id="tree-J5">晉級5</text><text x="280" y="430" class="bracket-text" text-anchor="middle" id="tree-J1">晉級1</text><text x="400" y="430" class="bracket-text" text-anchor="middle" id="tree-J2">晉級2</text><text x="520" y="430" class="bracket-text" text-anchor="middle" id="tree-J3">晉級3</text><text x="640" y="430" class="bracket-text" text-anchor="middle" id="tree-J4">晉級4</text><text x="760" y="430" class="bracket-text" text-anchor="middle" id="tree-J6">晉級6</text><text x="340" y="305" class="bracket-text" text-anchor="middle" id="tree-Y1">亞1</text><text x="580" y="305" class="bracket-text" text-anchor="middle" id="tree-Y2">亞2</text><text x="250" y="210" class="bracket-text" text-anchor="middle" id="tree-G1">冠1</text><text x="670" y="210" class="bracket-text" text-anchor="middle" id="tree-G2">冠2</text><rect x="305" y="35" width="340" height="75" rx="20" fill="#fef3c7" stroke="#fbbf24" stroke-width="6" /><text x="475" y="80" class="bracket-text" text-anchor="middle" style="font-size: 30px; fill: #92400e" id="tree-CHAMP">登頂總冠軍</text></svg></div>
-                </div>
-                <div class="card p-12 flex flex-col items-center shadow-lg">
-                    <h3 class="text-2xl font-black mb-10 underline decoration-emerald-500 italic">友誼賽樹狀圈</h3>
-                    <div style="width: 700px; height: 500px;"><svg width="100%" height="100%" viewBox="0 0 700 450"><path class="bracket-line" d="M100,400 v-120 h200 v120" /><path class="bracket-line" d="M400,400 v-120 h200 v120" /><path class="bracket-line" d="M200,280 v-110 h300 v110" /><text x="100" y="430" class="bracket-text" text-anchor="middle" id="tree-F1">友誼1</text><text x="300" y="430" class="bracket-text" text-anchor="middle" id="tree-F2">友誼2</text><text x="400" y="430" class="bracket-text" text-anchor="middle" id="tree-F3">友誼3</text><text x="600" y="430" class="bracket-text" text-anchor="middle" id="tree-F4">友誼4</text><text x="200" y="270" class="bracket-text" text-anchor="middle" id="tree-FF1">Final友1</text><text x="500" y="270" class="bracket-text" text-anchor="middle" id="tree-FF2">Final友2</text><rect x="225" y="40" width="250" height="60" rx="15" fill="#f0fdf4" stroke="#10b981" stroke-width="5" /><text x="350" y="80" class="bracket-text" text-anchor="middle" style="font-size: 26px; fill: #065f46" id="tree-F-MAX">友誼最高</text></svg></div>
-                </div>
+                <div class="card p-12 flex flex-col items-center shadow-lg"><h3 class="text-2xl font-black mb-10 underline decoration-blue-500 italic">晉級賽對外賽圈</h3><div style="width: 950px; height: 500px;"><svg width="100%" height="100%" viewBox="0 0 950 450"><path class="bracket-line" d="M280,400 v-80 h120 v80" /><path class="bracket-line" d="M520,400 v-80 h120 v80" /><path class="bracket-line" d="M160,400 v-180 h180 v100" /><path class="bracket-line" d="M340,320 v-100" /><path class="bracket-line" d="M760,400 v-180 h-180 v100" /><path class="bracket-line" d="M580,320 v-100" /><path class="bracket-line" d="M250,220 v-90 h420 v90" /><text x="160" y="430" class="bracket-text" text-anchor="middle" id="tree-J5">晉級5</text><text x="280" y="430" class="bracket-text" text-anchor="middle" id="tree-J1">晉級1</text><text x="400" y="430" class="bracket-text" text-anchor="middle" id="tree-J2">晉級2</text><text x="520" y="430" class="bracket-text" text-anchor="middle" id="tree-J3">晉級3</text><text x="640" y="430" class="bracket-text" text-anchor="middle" id="tree-J4">晉級4</text><text x="760" y="430" class="bracket-text" text-anchor="middle" id="tree-J6">晉級6</text><text x="340" y="305" class="bracket-text" text-anchor="middle" id="tree-Y1">亞1</text><text x="580" y="305" class="bracket-text" text-anchor="middle" id="tree-Y2">亞2</text><text x="250" y="210" class="bracket-text" text-anchor="middle" id="tree-G1">冠1</text><text x="670" y="210" class="bracket-text" text-anchor="middle" id="tree-G2">冠2</text><rect x="305" y="35" width="340" height="75" rx="20" fill="#fef3c7" stroke="#fbbf24" stroke-width="6" /><text x="475" y="80" class="bracket-text" text-anchor="middle" style="font-size: 30px; fill: #92400e" id="tree-CHAMP">登頂總冠軍</text></svg></div></div>
+                <div class="card p-12 flex flex-col items-center shadow-lg"><h3 class="text-2xl font-black mb-10 underline decoration-emerald-500 italic">友誼賽樹狀圈</h3><div style="width: 700px; height: 500px;"><svg width="100%" height="100%" viewBox="0 0 700 450"><path class="bracket-line" d="M100,400 v-120 h200 v120" /><path class="bracket-line" d="M400,400 v-120 h200 v120" /><path class="bracket-line" d="M200,280 v-110 h300 v110" /><text x="100" y="430" class="bracket-text" text-anchor="middle" id="tree-F1">友誼1</text><text x="300" y="430" class="bracket-text" text-anchor="middle" id="tree-F2">友誼2</text><text x="400" y="430" class="bracket-text" text-anchor="middle" id="tree-F3">友誼3</text><text x="600" y="430" class="bracket-text" text-anchor="middle" id="tree-F4">友誼4</text><text x="200" y="270" class="bracket-text" text-anchor="middle" id="tree-FF1">Final友1</text><text x="500" y="270" class="bracket-text" text-anchor="middle" id="tree-FF2">Final友2</text><rect x="225" y="40" width="250" height="60" rx="15" fill="#f0fdf4" stroke="#10b981" stroke-width="5" /><text x="350" y="80" class="bracket-text" text-anchor="middle" style="font-size: 26px; fill: #065f46" id="tree-F-MAX">友誼最高</text></svg></div></div>
             </div>
         </div>
 
-        <!-- Tab 3: Prelim (RESTORED SCORE ENTRY + PROMOTION SEPARATED) -->
+        <!-- Tab 3: Prelim -->
         <div id="tab-prelim" class="tab-content space-y-16">
             <h2 class="text-4xl font-black text-slate-800 text-center italic">🏸 預賽分組：對戰錄入與晉級判定</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <!-- Group A -->
                 <div class="space-y-10">
-                    <div class="card p-8"><h4 class="text-center mb-6 font-bold italic text-blue-800 text-xl">A 組 (預賽示意圖)</h4>
-                        <div class="diagram-container">
-                            <svg class="absolute inset-0 w-full h-full" stroke="#cbd5e1" stroke-dasharray="8,6"><line x1="20%" y1="15%" x2="80%" y2="15%" /><line x1="80%" y1="15%" x2="80%" y2="75%" /><line x1="80%" y1="75%" x2="20%" y2="75%" /><line x1="20%" y1="75%" x2="20%" y2="15%" /><line x1="20%" y1="15%" x2="80%" y2="75%" /><line x1="80%" y1="15%" x2="20%" y2="75%" /></svg>
-                            <div class="node node-a" style="left: 20%; top: 15%; transform: translate(-50%, -50%);"><span data-team="A1">A1</span></div><div class="node node-a" style="left: 80%; top: 15%; transform: translate(-50%, -50%);"><span data-team="A2">A2</span></div><div class="node node-a" style="left: 80%; top: 75%; transform: translate(-50%, -50%);"><span data-team="A3">A3</span></div><div class="node node-a" style="left: 20%; top: 75%; transform: translate(-50%, -50%);"><span data-team="A4">A4</span></div><div class="court-label" style="left: 50%; top: 15%;">場地 1</div><div class="court-label" style="left: 80%; top: 45%;">場地 2</div><div class="court-label" style="left: 50%; top: 75%;">場地 2</div><div class="court-label" style="left: 20%; top: 45%;">場地 1</div><div class="court-label" style="left: 42%; top: 38% ; background: #fff;">場地 1</div><div class="court-label" style="left: 68%; top: 62% ; background: #fff;">場地 2</div>
-                        </div>
-                    </div>
-                    <!-- Part 1: Detailed Match Score -->
-                    <div class="card p-8 bg-slate-50">
-                        <h5 class="font-black mb-6 text-blue-900 border-b-2 border-blue-200 pb-2">【區塊 1】各場對戰比分錄入</h5>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="A1">A1</span> vs <span data-team="A2">A2</span>)</span> <div><input type="text" id="ms-A1-A2-1" class="persist score-input"> : <input type="text" id="ms-A1-A2-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="A3">A3</span> vs <span data-team="A4">A4</span>)</span> <div><input type="text" id="ms-A3-A4-1" class="persist score-input"> : <input type="text" id="ms-A3-A4-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="A1">A1</span> vs <span data-team="A3">A3</span>)</span> <div><input type="text" id="ms-A1-A3-1" class="persist score-input"> : <input type="text" id="ms-A1-A3-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="A2">A2</span> vs <span data-team="A4">A4</span>)</span> <div><input type="text" id="ms-A2-A4-1" class="persist score-input"> : <input type="text" id="ms-A2-A4-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="A1">A1</span> vs <span data-team="A4">A4</span>)</span> <div><input type="text" id="ms-A1-A4-1" class="persist score-input"> : <input type="text" id="ms-A1-A4-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="A2">A2</span> vs <span data-team="A3">A3</span>)</span> <div><input type="text" id="ms-A2-A3-1" class="persist score-input"> : <input type="text" id="ms-A2-A3-2" class="persist score-input"></div></div>
-                        </div>
-                    </div>
-                    <!-- Part 2: Promotion Check -->
-                    <div class="card p-8 bg-blue-50/50 border-2 border-blue-100 italic">
-                        <h5 class="font-black mb-6 text-blue-700 pb-2">【區塊 2】判定小組晉級 (勾選 2 隊)</h5>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-A1"><span>(<span data-team="A1">A1</span>)</span> <input type="checkbox" id="promote-A1" class="persist promote-check" onchange="togglePromote('A1')"></div>
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-A2"><span>(<span data-team="A2">A2</span>)</span> <input type="checkbox" id="promote-A2" class="persist promote-check" onchange="togglePromote('A2')"></div>
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-A3"><span>(<span data-team="A3">A3</span>)</span> <input type="checkbox" id="promote-A3" class="persist promote-check" onchange="togglePromote('A3')"></div>
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-A4"><span>(<span data-team="A4">A4</span>)</span> <input type="checkbox" id="promote-A4" class="persist promote-check" onchange="togglePromote('A4')"></div>
-                        </div>
-                    </div>
+                    <div class="card p-8"><h4 class="text-center mb-6 font-bold italic text-blue-800 text-xl">A 組</h4><div class="diagram-container"><svg class="absolute inset-0 w-full h-full" stroke="#cbd5e1" stroke-dasharray="8,6"><line x1="20%" y1="15%" x2="80%" y2="15%" /><line x1="80%" y1="15%" x2="80%" y2="75%" /><line x1="80%" y1="75%" x2="20%" y2="75%" /><line x1="20%" y1="75%" x2="20%" y2="15%" /><line x1="20%" y1="15%" x2="80%" y2="75%" /><line x1="80%" y1="15%" x2="20%" y2="75%" /></svg><div class="node node-a" style="left: 20%; top: 15%; transform: translate(-50%, -50%);"><span data-team="A1">A1</span></div><div class="node node-a" style="left: 80%; top: 15%; transform: translate(-50%, -50%);"><span data-team="A2">A2</span></div><div class="node node-a" style="left: 80%; top: 75%; transform: translate(-50%, -50%);"><span data-team="A3">A3</span></div><div class="node node-a" style="left: 20%; top: 75%; transform: translate(-50%, -50%);"><span data-team="A4">A4</span></div><div class="court-label" style="left: 50%; top: 15%;">場地 1</div><div class="court-label" style="left: 80%; top: 45%;">場地 2</div><div class="court-label" style="left: 50%; top: 75%;">場地 2</div><div class="court-label" style="left: 20%; top: 45%;">場地 1</div><div class="court-label" style="left: 42%; top: 38% ; background: #fff;">場地 1</div><div class="court-label" style="left: 68%; top: 62% ; background: #fff;">場地 2</div></div></div>
+                    <div class="card p-8 bg-slate-50"><h5 class="font-black mb-6 text-blue-900 border-b-2 border-blue-200 pb-2">【區塊 1】比分錄入</h5><div class="space-y-4"><div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="A1">A1</span> vs <span data-team="A2">A2</span>)</span> <div><input type="text" id="ms-A1-A2-1" class="persist score-input"> : <input type="text" id="ms-A1-A2-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="A3">A3</span> vs <span data-team="A4">A4</span>)</span> <div><input type="text" id="ms-A3-A4-1" class="persist score-input"> : <input type="text" id="ms-A3-A4-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="A1">A1</span> vs <span data-team="A3">A3</span>)</span> <div><input type="text" id="ms-A1-A3-1" class="persist score-input"> : <input type="text" id="ms-A1-A3-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="A2">A2</span> vs <span data-team="A4">A4</span>)</span> <div><input type="text" id="ms-A2-A4-1" class="persist score-input"> : <input type="text" id="ms-A2-A4-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="A1">A1</span> vs <span data-team="A4">A4</span>)</span> <div><input type="text" id="ms-A1-A4-1" class="persist score-input"> : <input type="text" id="ms-A1-A4-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="A2">A2</span> vs <span data-team="A3">A3</span>)</span> <div><input type="text" id="ms-A2-A3-1" class="persist score-input"> : <input type="text" id="ms-A2-A3-2" class="persist score-input"></div></div></div></div>
+                    <div class="card p-8 bg-blue-50/50 border-2 border-blue-100 italic"><h5 class="font-black mb-6 text-blue-700 pb-2">【區塊 2】晉級判定</h5><div class="space-y-4"><div class="flex justify-between items-center p-2 rounded-lg" id="row-A1"><span>(<span data-team="A1">A1</span>)</span> <input type="checkbox" id="promote-A1" class="persist promote-check" onchange="togglePromote('A1')"></div><div class="flex justify-between items-center p-2 rounded-lg" id="row-A2"><span>(<span data-team="A2">A2</span>)</span> <input type="checkbox" id="promote-A2" class="persist promote-check" onchange="togglePromote('A2')"></div><div class="flex justify-between items-center p-2 rounded-lg" id="row-A3"><span>(<span data-team="A3">A3</span>)</span> <input type="checkbox" id="promote-A3" class="persist promote-check" onchange="togglePromote('A3')"></div><div class="flex justify-between items-center p-2 rounded-lg" id="row-A4"><span>(<span data-team="A4">A4</span>)</span> <input type="checkbox" id="promote-A4" class="persist promote-check" onchange="togglePromote('A4')"></div></div></div>
                 </div>
-                <!-- Group B -->
-                <div class="space-y-10">
-                    <div class="card p-8"><h4 class="text-center mb-6 font-bold italic text-purple-800 text-xl">B 組</h4><div class="diagram-container"><svg class="absolute inset-0 w-full h-full" stroke="#cbd5e1" stroke-dasharray="6,4"><line x1="50%" y1="15%" x2="20%" y2="75%" /><line x1="20%" y1="75%" x2="80%" y2="75%" /><line x1="80%" y1="75%" x2="50%" y2="15%" /></svg><div class="node node-b" style="left: 50%; top: 15%; transform: translate(-50%, -50%);"><span data-team="B1">B1</span></div><div class="node node-b" style="left: 20%; top: 75%; transform: translate(-50%, -50%);"><span data-team="B2">B2</span></div><div class="node node-b" style="left: 80%; top: 75%; transform: translate(-50%, -50%);"><span data-team="B3">B3</span></div><div class="court-label" style="left: 35%; top: 45%;">場地 3</div><div class="court-label" style="left: 65%; top: 45%;">場地 3</div><div class="court-label" style="left: 50%; top: 75%;">場地 3</div></div></div>
-                    <div class="card p-8 bg-slate-50">
-                        <h5 class="font-black mb-6 text-purple-900 border-b-2 border-purple-200">【區塊 1】比分錄入</h5>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="B1">B1</span> v <span data-team="B2">B2</span>)</span> <div><input type="text" id="ms-B1-B2-1" class="persist score-input"> : <input type="text" id="ms-B1-B2-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="B3">B3</span> v <span data-team="B1">B1</span>)</span> <div><input type="text" id="ms-B3-B1-1" class="persist score-input"> : <input type="text" id="ms-B3-B1-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="B2">B2</span> v <span data-team="B3">B3</span>)</span> <div><input type="text" id="ms-B2-B3-1" class="persist score-input"> : <input type="text" id="ms-B2-B3-2" class="persist score-input"></div></div>
-                        </div>
-                    </div>
-                    <div class="card p-8 bg-purple-50/50 border-2 border-purple-100">
-                        <h5 class="font-black mb-6 text-purple-700 pb-2">【區塊 2】判定晉級</h5>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-B1"><span>(<span data-team="B1">B1</span>)</span> <input type="checkbox" id="promote-B1" class="persist promote-check" onchange="togglePromote('B1')"></div>
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-B2"><span>(<span data-team="B2">B2</span>)</span> <input type="checkbox" id="promote-B2" class="persist promote-check" onchange="togglePromote('B2')"></div>
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-B3"><span>(<span data-team="B3">B3</span>)</span> <input type="checkbox" id="promote-B3" class="persist promote-check" onchange="togglePromote('B3')"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Group C -->
-                <div class="space-y-10">
-                    <div class="card p-8"><h4 class="text-center mb-6 font-bold italic text-emerald-800 text-xl">C 組</h4><div class="diagram-container"><svg class="absolute inset-0 w-full h-full" stroke="#cbd5e1" stroke-dasharray="6,4"><line x1="50%" y1="15%" x2="20%" y2="75%" /><line x1="20%" y1="75%" x2="80%" y2="75%" /><line x1="80%" y1="75%" x2="50%" y2="15%" /></svg><div class="node node-c" style="left: 50%; top: 15%; transform: translate(-50%, -50%);"><span data-team="C1">C1</span></div><div class="node node-c" style="left: 20%; top: 75%; transform: translate(-50%, -50%);"><span data-team="C2">C2</span></div><div class="node node-c" style="left: 80%; top: 75%; transform: translate(-50%, -50%);"><span data-team="C3">C3</span></div><div class="court-label" style="left: 35%; top: 45%;">場地 4</div><div class="court-label" style="left: 65%; top: 45%;">場地 4</div><div class="court-label" style="left: 50%; top: 75%;">場地 4</div></div></div>
-                    <div class="card p-8 bg-slate-50">
-                        <h5 class="font-black mb-6 text-emerald-900 border-b-2 border-emerald-200">【區塊 1】比分錄入</h5>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="C1">C1</span> v <span data-team="C2">C2</span>)</span> <div><input type="text" id="ms-C1-C2-1" class="persist score-input"> : <input type="text" id="ms-C1-C2-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="C3">C3</span> v <span data-team="C1">C1</span>)</span> <div><input type="text" id="ms-C3-C1-1" class="persist score-input"> : <input type="text" id="ms-C3-C1-2" class="persist score-input"></div></div>
-                            <div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="C2">C2</span> v <span data-team="C3">C3</span>)</span> <div><input type="text" id="ms-C2-C3-1" class="persist score-input"> : <input type="text" id="ms-C2-C3-2" class="persist score-input"></div></div>
-                        </div>
-                    </div>
-                    <div class="card p-8 bg-emerald-50/50 border-2 border-emerald-100">
-                        <h5 class="font-black mb-6 text-emerald-700 pb-2">【區塊 2】判定晉級</h5>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-C1"><span>(<span data-team="C1">C1</span>)</span> <input type="checkbox" id="promote-C1" class="persist promote-check" onchange="togglePromote('C1')"></div>
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-C2"><span>(<span data-team="C2">C2</span>)</span> <input type="checkbox" id="promote-C2" class="persist promote-check" onchange="togglePromote('C2')"></div>
-                            <div class="flex justify-between items-center p-2 rounded-lg" id="row-C3"><span>(<span data-team="C3">C3</span>)</span> <input type="checkbox" id="promote-C3" class="persist promote-check" onchange="togglePromote('C3')"></div>
-                        </div>
-                    </div>
-                </div>
+                <div class="space-y-10"><div class="card p-8"><h4 class="text-center mb-6 font-bold italic text-purple-800 text-xl">B 組</h4><div class="diagram-container"><svg class="absolute inset-0 w-full h-full" stroke="#cbd5e1" stroke-dasharray="6,4"><line x1="50%" y1="15%" x2="20%" y2="75%" /><line x1="20%" y1="75%" x2="80%" y2="75%" /><line x1="80%" y1="75%" x2="50%" y2="15%" /></svg><div class="node node-b" style="left: 50%; top: 15%; transform: translate(-50%, -50%);"><span data-team="B1">B1</span></div><div class="node node-b" style="left: 20%; top: 75%; transform: translate(-50%, -50%);"><span data-team="B2">B2</span></div><div class="node node-b" style="left: 80%; top: 75%; transform: translate(-50%, -50%);"><span data-team="B3">B3</span></div><div class="court-label" style="left: 35%; top: 45%;">場地 3</div><div class="court-label" style="left: 65%; top: 45%;">場地 3</div><div class="court-label" style="left: 50%; top: 75%;">場地 3</div></div></div><div class="card p-8 bg-slate-50"><h5 class="font-black mb-6 text-purple-900 border-b-2 border-purple-200">【區塊 1】比分錄入</h5><div class="space-y-4"><div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="B1">B1</span> v <span data-team="B2">B2</span>)</span> <div><input type="text" id="ms-B1-B2-1" class="persist score-input"> : <input type="text" id="ms-B1-B2-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="B3">B3</span> v <span data-team="B1">B1</span>)</span> <div><input type="text" id="ms-B3-B1-1" class="persist score-input"> : <input type="text" id="ms-B3-B1-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="B2">B2</span> v <span data-team="B3">B3</span>)</span> <div><input type="text" id="ms-B2-B3-1" class="persist score-input"> : <input type="text" id="ms-B2-B3-2" class="persist score-input"></div></div></div></div><div class="card p-8 bg-purple-50/50 border-2 border-purple-100"><h5 class="font-black mb-6 text-purple-700 pb-2">【區塊 2】判定晉級</h5><div class="space-y-4"><div class="flex justify-between items-center p-2 rounded-lg" id="row-B1"><span>(<span data-team="B1">B1</span>)</span> <input type="checkbox" id="promote-B1" class="persist promote-check" onchange="togglePromote('B1')"></div><div class="flex justify-between items-center p-2 rounded-lg" id="row-B2"><span>(<span data-team="B2">B2</span>)</span> <input type="checkbox" id="promote-B2" class="persist promote-check" onchange="togglePromote('B2')"></div><div class="flex justify-between items-center p-2 rounded-lg" id="row-B3"><span>(<span data-team="B3">B3</span>)</span> <input type="checkbox" id="promote-B3" class="persist promote-check" onchange="togglePromote('B3')"></div></div></div></div>
+                <div class="space-y-10"><div class="card p-8"><h4 class="text-center mb-6 font-bold italic text-emerald-800 text-xl">C 組</h4><div class="diagram-container"><svg class="absolute inset-0 w-full h-full" stroke="#cbd5e1" stroke-dasharray="6,4"><line x1="50%" y1="15%" x2="20%" y2="75%" /><line x1="20%" y1="75%" x2="80%" y2="75%" /><line x1="80%" y1="75%" x2="50%" y2="15%" /></svg><div class="node node-c" style="left: 50%; top: 15%; transform: translate(-50%, -50%);"><span data-team="C1">C1</span></div><div class="node node-c" style="left: 20%; top: 75%; transform: translate(-50%, -50%);"><span data-team="C2">C2</span></div><div class="node node-c" style="left: 80%; top: 75%; transform: translate(-50%, -50%);"><span data-team="C3">C3</span></div><div class="court-label" style="left: 35%; top: 45%;">場地 4</div><div class="court-label" style="left: 65%; top: 45%;">場地 4</div><div class="court-label" style="left: 50%; top: 75%;">場地 4</div></div></div><div class="card p-8 bg-slate-50"><h5 class="font-black mb-6 text-emerald-900 border-b-2 border-emerald-200">【區塊 1】比分錄入</h5><div class="space-y-4"><div class="flex justify-between items-center text-sm"><span>13:00 (<span data-team="C1">C1</span> v <span data-team="C2">C2</span>)</span> <div><input type="text" id="ms-C1-C2-1" class="persist score-input"> : <input type="text" id="ms-C1-C2-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>13:35 (<span data-team="C3">C3</span> v <span data-team="C1">C1</span>)</span> <div><input type="text" id="ms-C3-C1-1" class="persist score-input"> : <input type="text" id="ms-C3-C1-2" class="persist score-input"></div></div><div class="flex justify-between items-center text-sm"><span>14:05 (<span data-team="C2">C2</span> v <span data-team="C3">C3</span>)</span> <div><input type="text" id="ms-C2-C3-1" class="persist score-input"> : <input type="text" id="ms-C2-C3-2" class="persist score-input"></div></div></div></div><div class="card p-8 bg-emerald-50/50 border-2 border-emerald-100"><h5 class="font-black mb-6 text-emerald-700 pb-2">【區塊 2】判定晉級</h5><div class="space-y-4"><div class="flex justify-between items-center p-2 rounded-lg" id="row-C1"><span>(<span data-team="C1">C1</span>)</span> <input type="checkbox" id="promote-C1" class="persist promote-check" onchange="togglePromote('C1')"></div><div class="flex justify-between items-center p-2 rounded-lg" id="row-C2"><span>(<span data-team="C2">C2</span>)</span> <input type="checkbox" id="promote-C2" class="persist promote-check" onchange="togglePromote('C2')"></div><div class="flex justify-between items-center p-2 rounded-lg" id="row-C3"><span>(<span data-team="C3">C3</span>)</span> <input type="checkbox" id="promote-C3" class="persist promote-check" onchange="togglePromote('C3')"></div></div></div></div>
             </div>
         </div>
 
-        <!-- Tab 4: Schedule -->
+        <!-- Tab 4: Schedule (DYNAMIZED) -->
         <div id="tab-schedule" class="tab-content space-y-12">
             <h2 class="text-4xl font-black text-slate-800 text-center italic">🕒 完整版場地時程安排總覽表</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-                <div class="card p-8 border-t-[14px] border-blue-600 bg-white">
-                    <div class="text-2xl font-black mb-8 italic italic">場地 1 (Court 1)</div>
-                    <div class="space-y-5">
-                        <div class="p-4 bg-slate-50 rounded-2xl"><div class="text-xs text-slate-400 font-bold mb-1">13:00</div><div class="font-black text-lg"><span data-team="A1">A1</span> <span class="text-slate-200">vs</span> <span data-team="A2">A2</span></div></div>
-                        <div class="p-5 bg-amber-500 text-white rounded-3xl shadow-xl mt-12"><div class="text-xs opacity-90 mb-2 font-bold italic">16:10 最終總決戰</div><div class="text-4xl font-black italic text-center">🏆 冠軍對決</div></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Court 1 -->
+                <div class="card p-8 border-t-[14px] border-blue-600">
+                    <div class="text-2xl font-black mb-6 italic italic">場地 1 (Court 1)</div>
+                    <div class="space-y-4">
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:00-13:35</div><div class="font-black text-lg"><span data-team="A1">A1</span> vs <span data-team="A2">A2</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:35-14:05</div><div class="font-black text-lg"><span data-team="A1">A1</span> vs <span data-team="A3">A3</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">14:05-14:35</div><div class="font-black text-lg"><span data-team="A1">A1</span> vs <span data-team="A4">A4</span></div></div>
+                        <div class="slot-announcement">14:35-14:50 休息 / 晉級公布</div>
+                        <div class="p-4 slot-knockout px-4"><div class="slot-title">14:50-15:25</div><div class="font-black text-lg"><span data-team="J1">晉級 1</span> vs <span data-team="J2">晉級 2</span></div></div>
+                        <div class="p-4 slot-knockout px-4"><div class="slot-title">15:25-16:00</div><div class="font-black text-lg"><span data-team="J5">晉級 5</span> vs <span data-team="Y1">亞 1</span></div></div>
+                        <div class="slot-announcement">16:00-16:10 巔峰賽公布</div>
+                        <div class="p-8 bg-amber-500 text-white rounded-3xl shadow-xl"><div class="slot-title text-white">16:10-16:50</div><div class="text-4xl font-black italic text-center">🏆 冠軍對決</div><div class="text-center mt-2 font-bold font-lg text-amber-900"><span data-team="G1">冠 1</span> vs <span data-team="G2">冠 2</span></div></div>
+                        <div class="slot-announcement mt-4">16:50-17:00 🎖️ 頒獎大會</div>
                     </div>
                 </div>
-                <!-- Scheduling logic remains similar... simplified here to save context but all stages are there in implementation -->
-                <div class="card p-8 border-t-[14px] border-blue-600 bg-white"><div class="text-xl font-black mb-8 italic">場地 2</div><div class="p-4 bg-slate-50 rounded-2xl mb-4"><div class="text-xs text-slate-400">13:00</div><div class="font-black">A3 vs A4</div></div><div class="p-4 bg-blue-50 border border-blue-100 rounded-2xl">14:50 晉級3v4</div></div>
-                <div class="card p-8 border-t-[14px] border-purple-600 bg-white"><div class="text-xl font-black mb-8 italic">場地 3</div><div class="p-4 bg-slate-50 rounded-2xl mb-4"><div class="text-xs text-slate-400">13:00</div><div class="font-black">B1 vs B2</div></div><div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl">14:50 友誼1v2</div></div>
-                <div class="card p-8 border-t-[14px] border-emerald-600 bg-white"><div class="text-xl font-black mb-8 italic">場地 4</div><div class="p-4 bg-slate-50 rounded-2xl mb-4"><div class="text-xs text-slate-400">13:00</div><div class="font-black">C1 vs C2</div></div><div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">14:50 友誼3v4</div></div>
+                <!-- Court 2 -->
+                <div class="card p-8 border-t-[14px] border-blue-600">
+                    <div class="text-2xl font-black mb-6 italic">場地 2</div>
+                    <div class="space-y-4">
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:00-13:35</div><div class="font-black text-lg"><span data-team="A3">A3</span> vs <span data-team="A4">A4</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:35-14:05</div><div class="font-black text-lg"><span data-team="A2">A2</span> vs <span data-team="A4">A4</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">14:05-14:35</div><div class="font-black text-lg"><span data-team="A2">A2</span> vs <span data-team="A3">A3</span></div></div>
+                        <div class="slot-announcement">14:35-14:50 休息 / 晉級公布</div>
+                        <div class="p-4 slot-knockout px-4"><div class="slot-title">14:50-15:25</div><div class="font-black text-lg"><span data-team="J3">晉級 3</span> vs <span data-team="J4">晉級 4</span></div></div>
+                        <div class="p-4 slot-knockout px-4"><div class="slot-title">15:25-16:00</div><div class="font-black text-lg"><span data-team="Y2">亞 2</span> vs <span data-team="J6">晉級 6</span></div></div>
+                        <div class="slot-announcement">16:00-16:10 巔峰賽公布</div>
+                        <div class="p-4 bg-slate-100 rounded-3xl text-slate-400 italic text-center border-2 border-dashed border-slate-200">16:10-16:50 自由對戰</div>
+                    </div>
+                </div>
+                <!-- Court 3 -->
+                <div class="card p-8 border-t-[14px] border-purple-600">
+                    <div class="text-2xl font-black mb-6 italic">場地 3</div>
+                    <div class="space-y-4">
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:00-13:35</div><div class="font-black text-lg"><span data-team="B1">B1</span> vs <span data-team="B2">B2</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:35-14:05</div><div class="font-black text-lg"><span data-team="B3">B3</span> vs <span data-team="B1">C1</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">14:05-14:35</div><div class="font-black text-lg"><span data-team="B2">B2</span> vs <span data-team="B3">B3</span></div></div>
+                        <div class="slot-announcement">14:35-14:50 休息 / 晉級公布</div>
+                        <div class="p-4 slot-friendship px-4"><div class="slot-title">14:50-15:25</div><div class="font-black text-lg italic text-emerald-800"><span data-team="F1">友 1</span> vs <span data-team="F2">友 2</span></div></div>
+                        <div class="p-4 slot-friendship px-4"><div class="slot-title">15:25-16:00</div><div class="font-black text-lg italic text-emerald-800"><span data-team="FF1">Final 友 1</span> vs <span data-team="FF2">2</span></div></div>
+                        <div class="slot-announcement">16:00-16:10 巔峰賽公布</div>
+                        <div class="p-4 bg-slate-100 rounded-3xl text-slate-400 italic text-center border-2 border-dashed border-slate-200">16:10-16:50 自由對戰</div>
+                    </div>
+                </div>
+                <!-- Court 4 -->
+                <div class="card p-8 border-t-[14px] border-emerald-600">
+                    <div class="text-2xl font-black mb-6 italic">場地 4</div>
+                    <div class="space-y-4">
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:00-13:35</div><div class="font-black text-lg"><span data-team="C1">C1</span> vs <span data-team="C2">C2</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">13:35-14:05</div><div class="font-black text-lg"><span data-team="C3">C3</span> vs <span data-team="C1">C1</span></div></div>
+                        <div class="p-4 slot-prelim px-4"><div class="slot-title">14:05-14:35</div><div class="font-black text-lg"><span data-team="C2">C2</span> vs <span data-team="C3">C3</span></div></div>
+                        <div class="slot-announcement">14:35-14:50 休息 / 晉級公布</div>
+                        <div class="p-4 slot-friendship px-4"><div class="slot-title">14:50-15:25</div><div class="font-black text-lg italic text-emerald-800"><span data-team="F3">友 3</span> vs <span data-team="F4">友 4</span></div></div>
+                        <div class="p-4 bg-emerald-100 rounded-3xl text-emerald-600 italic text-center font-bold">15:25-16:00 自由對戰 / 友誼聯誼</div>
+                        <div class="slot-announcement">16:00-16:10 巔峰賽公布</div>
+                        <div class="p-4 bg-slate-100 rounded-3xl text-slate-400 italic text-center border-2 border-dashed border-slate-200">16:10-16:50 自由對戰</div>
+                    </div>
+                </div>
             </div>
-            <p class="text-center text-slate-400 italic">※ 其他時段請點擊各場次查看細節</p>
         </div>
 
-        <footer class="text-center text-slate-300 text-lg py-20 italic">2026 NTUST EMBA BADMINTON RECRUIT CUP</footer>
+        <footer class="text-center text-slate-300 text-lg py-20 italic font-black tracking-widest uppercase">2026 NTUST EMBA BADMINTON RECRUIT CUP</footer>
     </div>
 
     <script>
@@ -233,13 +164,13 @@
             document.getElementById(tabId).classList.add('active');
             document.getElementById('btn-' + tabId).classList.add('active');
         }
-        function updateTeam(id, name) {
-            if (!name) name = id;
-            document.querySelectorAll(`[data-team="${id}"]`).forEach(el => { el.textContent = name; });
-        }
-        function syncTree(id, value) {
-            const target = document.getElementById(`tree-${id}`);
-            if (target) target.textContent = value || id;
+        function syncAll(id, value) {
+            if (!value) value = id;
+            // Update Schedule & Prelim tables (data-team)
+            document.querySelectorAll(`[data-team="${id}"]`).forEach(el => { el.textContent = value; });
+            // Update SVG tree (tree-id)
+            const treeNode = document.getElementById(`tree-${id}`);
+            if (treeNode) treeNode.textContent = value;
         }
         function togglePromote(id) {
             const row = document.getElementById('row-' + id);
@@ -251,14 +182,14 @@
             document.querySelectorAll('.persist').forEach(el => {
                 data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
             });
-            localStorage.setItem('emba_bad_v10_final', JSON.stringify(data));
-            alert('✅ 戰況與勾選成績已成功存檔！');
+            localStorage.setItem('emba_bad_v11_fix', JSON.stringify(data));
+            alert('✅ 全階段賽程與實名數據已存檔！');
         }
         function loadData() {
-            const saved = localStorage.getItem('emba_bad_v10_final');
+            const saved = localStorage.getItem('emba_bad_v11_fix');
             document.querySelectorAll('.persist').forEach(el => {
                 const id = el.id.replace('input-', '');
-                if (id.length <= 2) updateTeam(id, el.value);
+                syncAll(id, el.value);
             });
             if (!saved) return;
             const data = JSON.parse(saved);
@@ -267,17 +198,16 @@
                     if (el.type === 'checkbox') {
                         el.checked = data[el.id];
                         const teamId = el.id.replace('promote-', '');
-                        if (el.checked) document.getElementById('row-' + teamId).classList.add('promoted-row');
+                        if (el.checked && document.getElementById('row-' + teamId)) document.getElementById('row-' + teamId).classList.add('promoted-row');
                     } else {
                         el.value = data[el.id];
                         const id = el.id.replace('input-', '');
-                        if (id.length <= 2) updateTeam(id, el.value);
-                        if (el.id.startsWith('input-')) syncTree(id, el.value);
+                        syncAll(id, el.value);
                     }
                 }
             });
         }
-        function resetData() { if (confirm('確定重置？')) { localStorage.removeItem('emba_bad_v10_final'); location.reload(); } }
+        function resetData() { if (confirm('⚠️ 警告：這將會清除所有名次與數據。確定要重置嗎？')) { localStorage.removeItem('emba_bad_v11_fix'); location.reload(); } }
     </script>
 </body>
 </html>
